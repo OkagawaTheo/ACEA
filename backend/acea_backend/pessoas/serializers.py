@@ -17,3 +17,8 @@ class TPresidenteSerializer(serializers.ModelSerializer):
         fields = ('id','nome','cpf','telefone','email')
 
         
+class TAdmSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TPresidente
+        fields= ('id','nome','cpf','telefone','email')
+

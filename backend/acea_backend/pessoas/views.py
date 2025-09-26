@@ -15,3 +15,8 @@ class TProfessorViewSet(viewsets.ModelViewSet):
 class TPresidenteViewSet(viewsets.ModelViewSet):
     queryset = TPresidente.objects.all()
     serializer_class = TPresidenteSerializer
+
+class TAdmViewSets(viewsets.ModelViewSet):
+    queryset = TAdm.objects.all()
+    serializer_class = TAdmSerializer
+
