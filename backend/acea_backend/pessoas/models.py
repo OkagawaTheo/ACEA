@@ -18,6 +18,9 @@ class TAluno(Pessoa):
     data_nascimento = models.DateField(null=True, blank=True)
     endereco = models.CharField(max_length=255)
     
+    cursos = models.ManyToManyField('educacao.TCurso', related_name='alunos')
+    atividades = models.ManyToManyField('educacao.TAtividade_esportiva',related_name='alunos_atividades')
+
     def criar_aluno(self):
         pass
 
@@ -37,7 +40,7 @@ class TAluno(Pessoa):
 class TProfessor(Pessoa):
     especialidade = models.CharField(max_length=100)
 
-    def cadastrar_aluno(self, curso_ou_atividade=None):
+    def cadastrar_aluno(self):
         pass
 
     def visualizar_pagamentos(self):
@@ -70,7 +73,7 @@ class TPresidente(Pessoa):
     def visualizar_pagamento(self):
         pass
         
-    def gerenciar_doacoes(self, doacao):
+    def gerenciar_doacoes(self):
         pass
         
     def controlar_documento(self):
