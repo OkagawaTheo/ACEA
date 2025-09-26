@@ -54,7 +54,7 @@ class TAtividade_esportiva(Educacao):
     def visualizar_atividade_esportiva(self):
         pass
 
-    def editar_atividade_esportiva():
+    def editar_atividade_esportiva(self):
         pass
 
     def adicionar_aluno(self):
