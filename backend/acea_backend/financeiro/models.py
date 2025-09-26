@@ -45,7 +45,7 @@ class TDoacao(models.Model):
         return f"Doação R$ {self.valor} de {self.doador_info}"
     
 
-class TDocumentos(models.Model):
+class TDocumento(models.Model):
     nome = models.CharField(max_length=255)
     tipo = models.CharField(max_length=50)
     data_upload = models.DateTimeField(auto_now_add=True)
