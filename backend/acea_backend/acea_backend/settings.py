@@ -16,6 +16,7 @@ INSTALLED_APPS = [
     'pessoas',
     'educacao',
     'financeiro',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
