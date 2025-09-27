@@ -18,8 +18,8 @@ class TAluno(Pessoa):
     data_nascimento = models.DateField(null=True, blank=True)
     endereco = models.CharField(max_length=255)
     
-    cursos = models.ManyToManyField('educacao.TCurso', related_name='alunos')
-    atividades = models.ManyToManyField('educacao.TAtividade_esportiva',related_name='alunos_atividades')
+    cursos = models.ManyToManyField('educacao.TCurso', related_name='alunos', blank=True)
+    atividades = models.ManyToManyField('educacao.TAtividade_esportiva', related_name='alunos_atividades', blank=True)
 
     def criar_aluno(self):
         pass
