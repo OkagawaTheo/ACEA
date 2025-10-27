@@ -5,6 +5,5 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 class AlunoListView(LoginRequiredMixin, ListView):
     model = Aluno
-    template_name = 'pessoas/aluno_lista.html'
-    context_object_name = 'alunos'
-    
+    template_name = 'pessoa/aluno_lista.html'
+    context_object_name = 'aluno'

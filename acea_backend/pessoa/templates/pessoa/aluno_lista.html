@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Alunos - ACEA</title>
+</head>
+<body>
+    <h1>Alunos Cadastrados na ACEA</h1>
+
+    {% if alunos %}
+        <ul>
+            {% for aluno in alunos %}
+                <li>
+                    Nome: **{{ aluno.nome }}** | CPF: {{ aluno.cpf }} | Data de Nasc.: {{ aluno.data_nasc }}
+                    
+                    </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Nenhum aluno encontrado. Por favor, cadastre um novo aluno.</p>
+        {% endif %}
+
+    {% if not user.is_authenticated %}
+        <p>Você precisa fazer login para visualizar esta lista.</p>
+    {% endif %}
+
+</body>
+</html>
