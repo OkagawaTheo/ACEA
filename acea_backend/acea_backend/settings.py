@@ -64,7 +64,7 @@ PROJECT_DIR = dirname(__file__)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': join(PROJECT_DIR,'ACEAdb.db'),
+        'NAME': join(PROJECT_DIR,'ACEADB.db'),
     }
 }
 
