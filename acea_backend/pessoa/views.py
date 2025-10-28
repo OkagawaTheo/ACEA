@@ -7,3 +7,4 @@ class AlunoListView(LoginRequiredMixin, ListView):
     model = Aluno
     template_name = 'pessoa/aluno_lista.html'
     context_object_name = 'aluno'
+

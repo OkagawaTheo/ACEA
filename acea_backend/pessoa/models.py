@@ -1,12 +1,11 @@
 from django.db import models
 
 class Pessoa(models.Model):
-    #nome cpf tel email
+    #nome cpf tel
     nome = models.CharField(max_length=255)
-    cpf = models.CharField(max_length=14,unique=True)
-    tel = models.CharField(max_length=15,blank=True,null=True) 
-    email = models.EmailField(unique=True)
-
+    cpf = models.CharField(max_length=11,unique=True,db_column="CPF")
+    tel = models.CharField(max_length=14,blank=True,null=True,unique=True) 
+    
     class Meta:
         abstract = True;
 
@@ -14,8 +13,10 @@ class Pessoa(models.Model):
         return self.nome
     
 class Aluno(Pessoa):
-    data_nasc = models.DateField()
-    endereco = models.CharField(max_length=400)
+    id_aluno = models.IntegerField(primary_key=True,default=0)
+    matricula = models.CharField(max_length=50,default='')
+    curso = models.CharField(max_length=100,default='')
+    endereco = models.CharField(max_length=255)
 
     # relations
 
