@@ -29,6 +29,10 @@ class Professor(Pessoa):
     especialidade = models.CharField(max_length=100)
 
 
-class Presidente(Pessoa):
+class Presidente(Pessoa): #documentacao
     is_admin = models.BooleanField(default=True)
+    
+
+class Administrador(Pessoa):
+    pass
     
