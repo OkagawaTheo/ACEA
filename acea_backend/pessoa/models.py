@@ -1,7 +1,6 @@
 from django.db import models
 
 class Pessoa(models.Model):
-    #nome cpf tel
     nome = models.CharField(max_length=255)
     cpf = models.CharField(max_length=11,unique=True,db_column="CPF")
     tel = models.CharField(max_length=14,blank=True,null=True) 
@@ -16,11 +15,14 @@ class Pessoa(models.Model):
 class Aluno(Pessoa):
     id_aluno = models.AutoField(primary_key=True)
     matricula = models.CharField(max_length=50,default='')
-    curso = models.CharField(max_length=100,default='')
     endereco = models.CharField(max_length=255,blank=True,null=True)
 
-    
-    
+    cursos_matriculados = models.ManyToManyField(
+        'curso.Curso',
+        blank = True,
+        related_name='alunos'
+    )
+
 
 class Professor(Pessoa):
     id_professor = models.AutoField(primary_key=True)
@@ -30,5 +32,3 @@ class Professor(Pessoa):
 class Presidente(Pessoa):
     is_admin = models.BooleanField(default=True)
     
-
-# adm é BOOLEAN
