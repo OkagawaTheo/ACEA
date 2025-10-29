@@ -4,7 +4,8 @@ class Pessoa(models.Model):
     #nome cpf tel
     nome = models.CharField(max_length=255)
     cpf = models.CharField(max_length=11,unique=True,db_column="CPF")
-    tel = models.CharField(max_length=14,blank=True,null=True,unique=True) 
+    tel = models.CharField(max_length=14,blank=True,null=True) 
+    email = models.EmailField(max_length=50,unique=True) 
     
     class Meta:
         abstract = True;
@@ -16,13 +17,19 @@ class Aluno(Pessoa):
     id_aluno = models.IntegerField(primary_key=True,default=0)
     matricula = models.CharField(max_length=50,default='')
     curso = models.CharField(max_length=100,default='')
-    endereco = models.CharField(max_length=255)
+    endereco = models.CharField(max_length=255,blank=True,null=True)
 
-    # relations
+    #<pk<id>>
+
+    # relations mtm mt1
 
 class Professor(Pessoa):
-    especialidade = models.CharField(max_length=100) # add choices depois (puxar do banco)
+    id_profesor = models.IntegerField(primary_key=True) #FK com documento  
+    especialidade = models.CharField(max_length=100)
 
 
 class Presidente(Pessoa):
-    pass
+    id_presidente 
+    
+
+# adm é BOOLEAN
