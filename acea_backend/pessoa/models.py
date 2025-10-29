@@ -7,20 +7,19 @@ class Pessoa(models.Model):
     email = models.EmailField(max_length=50,unique=True,default='') 
     
     class Meta:
-        abstract = True;
-
+        abstract = True
     def __str__(self):
         return self.nome
     
 class Aluno(Pessoa):
     id_aluno = models.AutoField(primary_key=True)
-    matricula = models.CharField(max_length=50,default='')
+    matricula = models.CharField(max_length=50,default='',unique=True)
     endereco = models.CharField(max_length=255,blank=True,null=True)
 
-    cursos_matriculados = models.ManyToManyField(
+    cursos_matriculados = models.ManyToManyField( 
         'curso.Curso',
         blank = True,
-        related_name='alunos'
+        related_name='alunos_matriculados'
     )
 
 
@@ -29,10 +28,13 @@ class Professor(Pessoa):
     especialidade = models.CharField(max_length=100)
 
 
-class Presidente(Pessoa): #documentacao
-    is_admin = models.BooleanField(default=True)
+class Presidente(Pessoa): 
+    id_presidente = models.AutoField(primary_key=True)
+    is_superuser = models.BooleanField(default=True)
     
 
 class Administrador(Pessoa):
-    pass
+    is_administrador = models.AutoField(primary_key=True)
+    is_superuser = models.BooleanField(default=True)
+
     
