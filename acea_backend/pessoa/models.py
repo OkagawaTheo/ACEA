@@ -30,11 +30,13 @@ class Professor(Pessoa):
 
 class Presidente(Pessoa): 
     id_presidente = models.AutoField(primary_key=True)
-    is_superuser = models.BooleanField(default=True)
+    is_superuser = models.BooleanField(default=True,verbose_name="Presidente")
     
 
 class Administrador(Pessoa):
+    tel = None
     is_administrador = models.AutoField(primary_key=True)
-    is_superuser = models.BooleanField(default=True)
+    is_superuser = models.BooleanField(default=True,verbose_name="Administrador")
+    # adicionar opcao de criar usuario do admin no django.
 
     
