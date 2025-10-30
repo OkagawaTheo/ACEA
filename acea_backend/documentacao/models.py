@@ -20,7 +20,7 @@ class Pagamento(models.Model):
         max_length=3,
         choices=TipoPagamento.choices,
         default=TipoPagamento.MENSALIDADE,
-        verbose_name="Tipo de Pagamento"
+        verbose_name="Tipo de Pagamento",
     )
 
     status = models.CharField(

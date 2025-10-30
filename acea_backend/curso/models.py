@@ -1,9 +1,14 @@
 from django.db import models
 
-class Curso(models.Model):
+
+class AbstractCurso(models.Model):
+    nome = models.CharField(max_length=255,default=''),
     id_curso = models.AutoField(primary_key=True)
-    nome_curso = models.CharField(max_length=255,default='')
-    
+
+    class Meta:
+        abstract = True
+
+class Curso(AbstractCurso):
     professores = models.ManyToManyField(
         'pessoa.Professor',
         blank=True,
@@ -12,3 +17,8 @@ class Curso(models.Model):
 
     def __str__(self):
         return self.nome_curso
+    
+
+
+# class AtividadeEsportiva(models.Model):
+    
