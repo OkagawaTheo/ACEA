@@ -24,7 +24,7 @@ class Aluno(Pessoa):
 
 
 class Professor(Pessoa):
-    id_professor = models.AutoField(primary_key=True)
+    id_professor = models.AutoField(primary_key=True,default=1)
     especialidade = models.CharField(max_length=100)
 
 

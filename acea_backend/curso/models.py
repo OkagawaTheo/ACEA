@@ -28,5 +28,6 @@ class AtividadeEsportiva(AbstractCurso):
         Professor,
         blank=True,
         default='',   
+        on_delete=models.SET_DEFAULT,
     )
     
