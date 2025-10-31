@@ -18,8 +18,6 @@ class Curso(AbstractCurso):
         related_name='curso_ministrado',
     )    
 
-    class Meta:
-        db_table = 'Curso'
 
 class AtividadeEsportiva(AbstractCurso):
     id_ativesportiva = models.AutoField(primary_key=True)
