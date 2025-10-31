@@ -38,6 +38,10 @@ class Pagamento(models.Model):
         related_name='pagamentos_gerenciados',
         verbose_name="Administrador"
     )
+
+    # add seção "pagante" pra relacionar pagamento-pessoa
+
+
     def __str__(self):
         return f"{self.get_tipo_pagamento_display()} - R$ {self.valor}"
 

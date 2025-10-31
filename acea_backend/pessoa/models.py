@@ -1,6 +1,6 @@
 from django.db import models
 
-class Pessoa(models.Model):
+class Pessoa(models.Model): # Adicionar OneToOneField com auth.User p/ segurança
     nome = models.CharField(max_length=255)
     cpf = models.CharField(max_length=11,unique=True,db_column="CPF")
     tel = models.CharField(max_length=14,blank=True,null=True) 
@@ -11,7 +11,7 @@ class Pessoa(models.Model):
     def __str__(self):
         return self.nome
     
-class Aluno(Pessoa):
+class Aluno(Pessoa): 
     id_aluno = models.AutoField(primary_key=True)
     matricula = models.CharField(max_length=50,default='',unique=True)
     endereco = models.CharField(max_length=255,blank=True,null=True)
@@ -24,7 +24,7 @@ class Aluno(Pessoa):
 
 
 class Professor(Pessoa):
-    id_professor = models.AutoField(primary_key=True,default=1)
+    id_professor = models.AutoField(primary_key=True)
     especialidade = models.CharField(max_length=100)
 
 
@@ -37,6 +37,6 @@ class Administrador(Pessoa):
     tel = None
     is_administrador = models.AutoField(primary_key=True)
     is_superuser = models.BooleanField(default=True,verbose_name="Administrador")
-    # adicionar opcao de criar usuario do admin no django.
+    # adicionar opcao de criar usuario do admin do sistema também no painel django.
 
     

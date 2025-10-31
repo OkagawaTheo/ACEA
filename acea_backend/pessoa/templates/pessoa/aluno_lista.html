@@ -10,9 +10,13 @@
         <ul>
             {% for aluno in alunos %}
                 <li>
-                    Nome: **{{ aluno.nome }}** | CPF: {{ aluno.cpf }} | Data de Nasc.: {{ aluno.data_nasc }}
-                    
-                    </li>
+                    {# NOVO LINK: Usa a rota 'aluno_detalhe' e passa o id_aluno como 'pk' #}
+                    <a href="{% url 'aluno_detalhe' pk=aluno.id_aluno %}">
+                        Nome: <strong>{{ aluno.nome }}</strong>
+                    </a>
+                    | CPF: {{ aluno.cpf }}
+                    {# O campo 'Data de Nasc.' não existe mais no seu modelo atual, pode remover ou manter a barra se necessário. #}
+                </li>
             {% endfor %}
         </ul>
     {% else %}

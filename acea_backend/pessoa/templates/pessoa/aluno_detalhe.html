@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Perfil do Aluno - {{ aluno.nome }}</title>
+</head>
+<body>
+    <h1>Dashboard/Perfil do Aluno: {{ aluno.nome }}</h1>
+    
+    <section>
+        <h2>Dados Pessoais</h2>
+        <p><strong>Nome:</strong> {{ aluno.nome }}</p>
+        <p><strong>CPF:</strong> {{ aluno.cpf }}</p>
+        <p><strong>E-mail:</strong> {{ aluno.email }}</p>
+        <p><strong>Matrícula:</strong> {{ aluno.matricula }}</p>
+        <p><strong>Telefone:</strong> {{ aluno.tel|default:"Não informado" }}</p>
+        <p><strong>Endereço:</strong> {{ aluno.endereco|default:"Não informado" }}</p>
+    </section>
+
+    <section>
+        <h2>Cursos Matriculados</h2>
+        {% if aluno.cursos_matriculados.all %} 
+            <ul>
+                {% for curso in aluno.cursos_matriculados.all %}
+                    <li>{{ curso.nome }}</li> 
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>O aluno não está matriculado em nenhum curso.</p>
+        {% endif %}
+    </section>
+
+    {# Link para voltar para a lista, usando o nome da URL 'aluno_lista' #}
+    <p><a href="{% url 'aluno_lista' %}">Voltar para a Lista de Alunos</a></p>
+
+</body>
+</html><!DOCTYPE html>
+<html>
+<head>
+    <title>Perfil do Aluno - {{ aluno.nome }}</title>
+</head>
+<body>
+    <h1>Dashboard/Perfil do Aluno: {{ aluno.nome }}</h1>
+    
+    <section>
+        <h2>Dados Pessoais</h2>
+        <p><strong>Nome:</strong> {{ aluno.nome }}</p>
+        <p><strong>CPF:</strong> {{ aluno.cpf }}</p>
+        <p><strong>E-mail:</strong> {{ aluno.email }}</p>
+        <p><strong>Matrícula:</strong> {{ aluno.matricula }}</p>
+        <p><strong>Telefone:</strong> {{ aluno.tel|default:"Não informado" }}</p>
+        <p><strong>Endereço:</strong> {{ aluno.endereco|default:"Não informado" }}</p>
+    </section>
+
+    <section>
+        <h2>Cursos Matriculados</h2>
+        {% if aluno.cursos_matriculados.all %} 
+            <ul>
+                {% for curso in aluno.cursos_matriculados.all %}
+                    <li>{{ curso.nome }}</li> 
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>O aluno não está matriculado em nenhum curso.</p>
+        {% endif %}
+    </section>
+
+    {# Link para voltar para a lista, usando o nome da URL 'aluno_lista' #}
+    <p><a href="{% url 'aluno_lista' %}">Voltar para a Lista de Alunos</a></p>
+
+</body>
+</html>

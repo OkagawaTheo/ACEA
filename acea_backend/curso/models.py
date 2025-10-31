@@ -14,18 +14,20 @@ class Curso(AbstractCurso):
 
     professores = models.ManyToManyField(
         'pessoa.Professor',
-        blank=True,
         related_name='curso_ministrado',
+        
     )    
-
+    # add horários pra selecionar/visualizar
+    # add choices p/ cursos
+    
 
 class AtividadeEsportiva(AbstractCurso):
     id_ativesportiva = models.AutoField(primary_key=True)
 
     id_professor = models.ForeignKey(
         Professor,
-        blank=True,
         default='',   
         on_delete=models.SET_DEFAULT,
+        related_name='atividade_ministrado',
     )
     
