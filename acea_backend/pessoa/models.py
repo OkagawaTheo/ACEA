@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.utils import timezone
 class Pessoa(models.Model): # Adicionar OneToOneField com auth.User p/ segurança
     nome = models.CharField(max_length=255)
     cpf = models.CharField(max_length=11,unique=True,db_column="CPF")
@@ -15,7 +15,7 @@ class Aluno(Pessoa):
     id_aluno = models.AutoField(primary_key=True)
     matricula = models.CharField(max_length=50,default='',unique=True)
     endereco = models.CharField(max_length=255,blank=True,null=True)
-
+    data_nasc = models.DateTimeField(default= timezone.now) #melhorar a seleção de data
     cursos_matriculados = models.ManyToManyField( 
         'curso.Curso',
         blank = True,

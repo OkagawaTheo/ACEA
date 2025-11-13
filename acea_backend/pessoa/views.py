@@ -11,7 +11,7 @@ class AlunoListView(LoginRequiredMixin, ListView):
 
 
 class ProfessorListView(LoginRequiredMixin,ListView):
-    model = Professor,
+    model = Professor
     template_name = 'Professor/'
     context_object_name = 'Professores'
 
@@ -35,17 +35,18 @@ class AlunoDetailAccesslMixin(UserPassesTestMixin):
         
         try:
             aluno_logado = Aluno.objects.get(email=self.request.user.email)
-            return aluno_logado.email == int(aluno_pk_url)
+            return aluno_logado.id_aluno == int(aluno_pk_url)
         except (Aluno.DoesNotExist,ValueError,TypeError):
             return False
 
     def handle_no_permission(self):
         if self.request.user.is_authenticated:
-            raise PermissionDenied("Sem permissão para visualiziar este perfil de aluno.")
+            raise PermissionDenied("Sem permissão para visualizar este perfil de aluno.")
 
         return super().handle_no_permission()
     
 class AlunoDetailView(LoginRequiredMixin,AlunoDetailAccesslMixin,DetailView):
-    model = Aluno,
-    template_name = 'pessoa/aluno_detalhe.html',
+    model = Aluno
+    template_name = 'pessoa/aluno_detalhe.html'
     context_object_name = 'aluno'
+    
