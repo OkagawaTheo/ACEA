@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 class Pagamento(models.Model):
     class TipoPagamento(models.TextChoices):
@@ -14,7 +15,7 @@ class Pagamento(models.Model):
 
     id_pagamento = models.AutoField(unique=True,primary_key=True)
     valor = models.DecimalField(decimal_places=2,max_digits=10)
-    data_pagamento = models.DateField(auto_now=True)
+    data_pagamento = models.DateField(default=timezone.now)
 
     tipo_pagamento = models.CharField(
         max_length=3,
@@ -39,7 +40,15 @@ class Pagamento(models.Model):
         verbose_name="Administrador"
     )
 
-    # add seção "pagante" pra relacionar pagamento-pessoa
+    id_aluno = models.ForeignKey(
+        'pessoa.Aluno',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='aluno_pagante',
+        verbose_name='Aluno'
+    )
+
 
 
     def __str__(self):
