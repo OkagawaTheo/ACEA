@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import ListView,DetailView 
 from .models import Aluno,Professor,Presidente,Administrador
+from documentacao.models import Pagamento
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 from django.core.exceptions import PermissionDenied
 
@@ -45,8 +46,23 @@ class AlunoDetailAccesslMixin(UserPassesTestMixin):
 
         return super().handle_no_permission()
     
+    
 class AlunoDetailView(LoginRequiredMixin,AlunoDetailAccesslMixin,DetailView):
     model = Aluno
     template_name = 'pessoa/aluno_detalhe.html'
     context_object_name = 'aluno'
+
     
+class AlunoPagamentosView(LoginRequiredMixin,AlunoDetailAccesslMixin,DetailView):
+    model = Aluno
+    template_name = 'pessoa/aluno_pagamentos'
+    context_object_name = 'pagamentos_aluno'
+
+    def get_context_data(self, **kwargs):
+        aluno = self.get_object()
+        context = super().get_context_data(**kwargs)
+        context[self.context_object_name] = aluno
+        context['aluno_pagamentos'] = aluno.aluno_pagante.all().order_by('-data_pagamento')
+
+        return context
+
