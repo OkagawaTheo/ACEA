@@ -65,7 +65,8 @@ class Doacao(models.Model):
 
     )
     valor = models.DecimalField(decimal_places=2,max_digits=10,default=Decimal('0.00'))
-
+    data_doacao = models.DateTimeField(default=timezone.now)
+    
     def __str__(self):
         return f"Doação de R$ {self.valor} em {self.data_doacao.strftime('%d/%m/%Y')}"
 
