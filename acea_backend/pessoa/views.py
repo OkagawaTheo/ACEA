@@ -55,13 +55,12 @@ class AlunoDetailView(LoginRequiredMixin,AlunoDetailAccesslMixin,DetailView):
     
 class AlunoPagamentosView(LoginRequiredMixin,AlunoDetailAccesslMixin,DetailView):
     model = Aluno
-    template_name = 'pessoa/aluno_pagamentos'
-    context_object_name = 'pagamentos_aluno'
+    template_name = 'pessoa/aluno_pagamentos.html'
+    context_object_name = 'aluno'
 
     def get_context_data(self, **kwargs):
-        aluno = self.get_object()
         context = super().get_context_data(**kwargs)
-        context[self.context_object_name] = aluno
+        aluno = self.get_object()
         context['aluno_pagamentos'] = aluno.aluno_pagante.all().order_by('-data_pagamento')
 
         return context

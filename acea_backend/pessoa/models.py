@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+
 class Pessoa(models.Model): # Adicionar OneToOneField com auth.User p/ segurança
     nome = models.CharField(max_length=255)
     cpf = models.CharField(max_length=11,unique=True,db_column="CPF")
