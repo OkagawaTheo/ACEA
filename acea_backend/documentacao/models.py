@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from decimal import Decimal
 
 class Pagamento(models.Model):
     class TipoPagamento(models.TextChoices):
@@ -14,7 +15,7 @@ class Pagamento(models.Model):
     
 
     id_pagamento = models.AutoField(unique=True,primary_key=True)
-    valor = models.DecimalField(decimal_places=2,max_digits=10)
+    valor = models.DecimalField(decimal_places=2,max_digits=10,default=Decimal('0.00'))
     data_pagamento = models.DateField(default=timezone.now)
 
     tipo_pagamento = models.CharField(
@@ -48,11 +49,23 @@ class Pagamento(models.Model):
         related_name='aluno_pagante',
         verbose_name='Aluno'
     )
-
-
-
     def __str__(self):
         return f"{self.get_tipo_pagamento_display()} - R$ {self.valor}"
 
 
+class Doacao(models.Model):
+    id_doacao = models.AutoField(primary_key=True)
+    id_doador = models.ForeignKey(
+        'pessoa.Doador',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        verbose_name='Doador',
+        related_name="doacoes_feitas"
+
+    )
+    valor = models.DecimalField(decimal_places=2,max_digits=10,default=Decimal('0.00'))
+
+    def __str__(self):
+        return f"Doação de R$ {self.valor} em {self.data_doacao.strftime('%d/%m/%Y')}"
 

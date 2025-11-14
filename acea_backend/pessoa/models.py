@@ -40,4 +40,5 @@ class Administrador(Pessoa):
     is_superuser = models.BooleanField(default=True,verbose_name="Administrador")
     # adicionar opcao de criar usuario do admin do sistema também no painel django.
 
-    
+class Doador(Pessoa):
+    id_doador = models.AutoField(primary_key=True)
