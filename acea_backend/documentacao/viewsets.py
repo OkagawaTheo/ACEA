@@ -2,10 +2,13 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
+from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from pessoa.permissions import IsPresidenteOrAdmin, IsOwnerOrAdmin
 from .models import Pagamento, Doacao
 from .serializers import PagamentoSerializer, DoacaoSerializer, StatusUpdateSerializer
+from pessoa.serializers import DoadorSerializer
+
 
 class PagamentoViewSet(viewsets.ModelViewSet):
     queryset = Pagamento.objects.all()
@@ -34,8 +37,18 @@ class PagamentoViewSet(viewsets.ModelViewSet):
         instance.status = serializer.validated_data['status']
         instance.save()
         
-        return Response(PagamentoSerializer(instance).data, status=status.HTTP_200_OK) 
+        return Response(PagamentoSerializer(instance).data, status=status.HTTP_200_OK)
+
 class DoacaoViewSet(viewsets.ModelViewSet):
     queryset = Doacao.objects.all()
     serializer_class = DoacaoSerializer
     permission_classes = [IsPresidenteOrAdmin]
+    
+    @action(detail=False, methods=['post'])
+    def registrar_doacao(self, request):
+        doacao_serializer = DoacaoSerializer(data=request.data)
+        doacao_serializer.is_valid(raise_exception=True)
+        
+        doacao = doacao_serializer.save(id_adm=request.user.administrador if hasattr(request.user, 'administrador') else None)
+        
+        return Response(DoacaoSerializer(doacao).data, status=status.HTTP_201_CREATED) 

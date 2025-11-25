@@ -8,7 +8,7 @@ from .models import Aluno, Professor, Presidente, Administrador, Doador
 from .serializers import AlunoSerializer, ProfessorSerializer, PresidenteSerializer, AdministradorSerializer, DoadorSerializer, MatricularSerializer
 from curso.models import Curso, AtividadeEsportiva
 from .permissions import IsPresidenteOrAdmin, IsProfessor
-
+from django.db.models import Q
 
 class AlunoViewSet(viewsets.ModelViewSet):
     queryset = Aluno.objects.all()
@@ -37,6 +37,18 @@ class ProfessorViewSet(viewsets.ModelViewSet):
 
         aluno.save()
         return Response(AlunoSerializer(aluno).data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['get'])
+    def meus_alunos(self, request, pk=None):
+        professor = self.get_object()
+        
+        alunos_cursos = Aluno.objects.filter(cursos_matriculados__professores=professor)
+        alunos_atividades = Aluno.objects.filter(cursos_matriculados__atividadeesportiva__id_professor=professor)
+        
+        alunos = (alunos_cursos | alunos_atividades).distinct()
+        
+        serializer = AlunoSerializer(alunos, many=True)
+        return Response(serializer.data)
 
 class PresidenteViewSet(viewsets.ModelViewSet):
     queryset = Presidente.objects.all()
