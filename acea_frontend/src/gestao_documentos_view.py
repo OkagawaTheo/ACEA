@@ -9,26 +9,35 @@ def create_gestao_documentos_view(page, role: str):
     # Simulação da Tabela de Documentos
     documentos_data_table = ft.DataTable(
         columns=[
-            ft.DataColumn(ft.Text("ID")),
-            ft.DataColumn(ft.Text("Título")),
-            ft.DataColumn(ft.Text("Data")),
-            ft.DataColumn(ft.Text("Ações" if role in ["Admin", "Professor"] else "Download")),
+            ft.DataColumn(ft.Text("ID", color=ft.Colors.BLACK)),
+            ft.DataColumn(ft.Text("Título", color=ft.Colors.BLACK)),
+            ft.DataColumn(ft.Text("Data", color=ft.Colors.BLACK)),
+            ft.DataColumn(ft.Text("Ações" if role in ["Admin", "Professor"] else "Download", color=ft.Colors.BLACK)),
         ],
         rows=[
-            ft.DataRow(cells=[ft.DataCell(ft.Text("001")), ft.DataCell(ft.Text("Estatuto Oficial")), ft.DataCell(ft.Text("01/01/2025")), 
-                              ft.DataCell(ft.Row([ft.IconButton(ft.Icons.CLOUD_DOWNLOAD, icon_color=ft.Colors.TEAL_700),
-                                                   *(
-                                                       [ft.IconButton(ft.Icons.EDIT, icon_color=ft.Colors.TEAL_700), ft.IconButton(ft.Icons.DELETE, icon_color=ft.Colors.RED_ACCENT_700)]
-                                                       if role in ["Admin", "Professor"] else []
-                                                   )
-                                                 ]))]),
-            ft.DataRow(cells=[ft.DataCell(ft.Text("002")), ft.DataCell(ft.Text("Regras do Curso")), ft.DataCell(ft.Text("15/10/2024")), 
-                              ft.DataCell(ft.Row([ft.IconButton(ft.Icons.CLOUD_DOWNLOAD, icon_color=ft.Colors.TEAL_700),
-                                                   *(
-                                                       [ft.IconButton(ft.Icons.EDIT, icon_color=ft.Colors.TEAL_700), ft.IconButton(ft.Icons.DELETE, icon_color=ft.Colors.RED_ACCENT_700)]
-                                                       if role in ["Admin", "Professor"] else []
-                                                   )
-                                                 ]))]),
+            ft.DataRow(cells=[
+                ft.DataCell(ft.Text("001", color=ft.Colors.BLACK)), 
+                ft.DataCell(ft.Text("Estatuto Oficial", color=ft.Colors.BLACK)), 
+                ft.DataCell(ft.Text("01/01/2025", color=ft.Colors.BLACK)), 
+                ft.DataCell(ft.Row([ft.IconButton(ft.Icons.CLOUD_DOWNLOAD, icon_color=ft.Colors.TEAL_700),
+                                    *(
+                                        [ft.IconButton(ft.Icons.EDIT, icon_color=ft.Colors.TEAL_700), ft.IconButton(ft.Icons.DELETE, icon_color=ft.Colors.RED_ACCENT_700)]
+                                        if role in ["Admin", "Professor"] else []
+                                    )
+                                    ]))
+            ]),
+            
+            ft.DataRow(cells=[
+                ft.DataCell(ft.Text("002", color=ft.Colors.BLACK)), 
+                ft.DataCell(ft.Text("Regras do Curso", color=ft.Colors.BLACK)), 
+                ft.DataCell(ft.Text("15/10/2024", color=ft.Colors.BLACK)), 
+                ft.DataCell(ft.Row([ft.IconButton(ft.Icons.CLOUD_DOWNLOAD, icon_color=ft.Colors.TEAL_700),
+                                    *(
+                                        [ft.IconButton(ft.Icons.EDIT, icon_color=ft.Colors.TEAL_700), ft.IconButton(ft.Icons.DELETE, icon_color=ft.Colors.RED_ACCENT_700)]
+                                        if role in ["Admin", "Professor"] else []
+                                    )
+                                    ]))
+            ]),
         ],
         border=ft.border.all(1, ft.Colors.BLACK12),
         vertical_lines=ft.border.BorderSide(0.5, ft.Colors.BLACK12),
@@ -39,11 +48,11 @@ def create_gestao_documentos_view(page, role: str):
     crud_section = ft.Container(
         content=ft.Column(
             [
-                ft.Text("Adicionar Novo Documento (TDocumento)", size=20, weight=ft.FontWeight.W_600),
+                ft.Text("Adicionar Novo Documento (TDocumento)", size=20, weight=ft.FontWeight.W_600, color=ft.Colors.BLACK87),
                 titulo_documento,
                 descricao_documento,
                 ft.Row([
-                    ft.ElevatedButton("Selecionar PDF...", icon=ft.Icons.ATTACH_FILE, color=ft.Colors.BLACK87),
+                    ft.ElevatedButton("Selecionar PDF...", icon=ft.Icons.ATTACH_FILE),
                     ft.ElevatedButton("Salvar Documento", icon=ft.Icons.SAVE, bgcolor=ft.Colors.RED_700, color=ft.Colors.WHITE)
                 ]),
             ]
@@ -55,7 +64,7 @@ def create_gestao_documentos_view(page, role: str):
     view_section = ft.Container(
         content=ft.Column(
             [
-                ft.Text("Documentos Oficiais Disponíveis", size=20, weight=ft.FontWeight.W_600),
+                ft.Text("Documentos Oficiais Disponíveis", size=20, weight=ft.FontWeight.W_600, color=ft.Colors.BLACK87),
                 documentos_data_table,
             ]
         ),
@@ -65,7 +74,7 @@ def create_gestao_documentos_view(page, role: str):
 
     return ft.Column(
         [
-            ft.Text("Gestão de Documentos", size=30, weight=ft.FontWeight.BOLD),
+            ft.Text("Gestão de Documentos", size=30, weight=ft.FontWeight.BOLD, color=ft.Colors.BLACK87),
             ft.Container(height=20),
             crud_section,
             view_section

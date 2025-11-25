@@ -1,7 +1,14 @@
 import flet as ft
 
 VIEW_MAPPING = {
-    "Home": 0, "Perfil": 1, "Cronogramas": 2, "Gestão Alunos": 3, "Documentos": 4, "Atividades": 5, "Doações": 6,
+    "Home": 0, 
+    "Perfil": 1, 
+    "Cronogramas": 2,
+    "Gestão Alunos": 3,
+    "Gestão Professores": 4,
+    "Documentos": 5, 
+    "Atividades": 6, 
+    "Doações": 7,    
 }
 
 # --- FUNÇÕES DE COMPONENTES FIXOS DO DASHBOARD ---
@@ -14,7 +21,7 @@ def create_history_mission():
                 ft.Divider(height=10, color=ft.Colors.RED_ACCENT_100),
                 ft.Text("Associação Cultural e Esportiva de Apucarana, fundada para preservar a cultura japonesa.", size=14, color=ft.Colors.BLACK87, selectable=True),
                 ft.Container(height=15),
-                ft.Text("Valores Chave:", size=16, weight=ft.FontWeight.W_600),
+                ft.Text("Valores Chave:", size=16, weight=ft.FontWeight.W_600, color=ft.Colors.BLACK87),
                 ft.Row(
                     [
                         ft.Icon(ft.Icons.AUTO_STORIES, color=ft.Colors.RED_ACCENT_700), ft.Text("Tradição", size=14, color=ft.Colors.BLACK87), ft.VerticalDivider(),
@@ -45,7 +52,7 @@ def create_member_events_panel():
                 
                 ft.Row(
                     [
-                        ft.Card(content=ft.Container(content=ft.Column([ft.Text("85", size=30, weight=ft.FontWeight.BOLD), ft.Text("Membros Ativos", size=12, color=ft.Colors.BLACK54)], alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.START), padding=15), elevation=0, margin=0, width=120, color=ft.Colors.WHITE),
+                        ft.Card(content=ft.Container(content=ft.Column([ft.Text("85", size=30, weight=ft.FontWeight.BOLD, color=ft.Colors.BLACK87), ft.Text("Membros Ativos", size=12, color=ft.Colors.BLACK54)], alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.START), padding=15), elevation=0, margin=0, width=120, color=ft.Colors.WHITE),
                         ft.Card(content=ft.Container(content=ft.Column([ft.Text("12", size=30, weight=ft.FontWeight.BOLD, color=ft.Colors.RED_ACCENT_700), ft.Text("Aulas / Cursos", size=12, color=ft.Colors.BLACK54)], alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.START), padding=15), elevation=0, margin=0, width=120, color=ft.Colors.WHITE),
                     ], spacing=15
                 ),
@@ -55,15 +62,22 @@ def create_member_events_panel():
     )
 
 def create_dashboard_content(page, role: str):
+    # 💡 AGORA, ADICIONAMOS O PAINEL DE EVENTOS AQUI
+    event_panel = create_member_events_panel() 
+    
     return ft.Column(
         [
+            # Mantenha a Missão (que faz parte da Home)
             ft.Container(height=20),
             create_history_mission(),
+            
+            # Adicione o Painel de Eventos (que agora é dinâmico)
+            event_panel,
+            
             ft.Text(f"\nPermissão Atual: {role}", color=ft.Colors.RED_700 if role in ['Professor', 'Admin'] else ft.Colors.TEAL_700),
         ],
         expand=True
     )
-
 def create_dashboard_view(page, switch_to_login, switch_content, role: str):
     
     def navigation_rail_change(e):
@@ -79,6 +93,7 @@ def create_dashboard_view(page, switch_to_login, switch_content, role: str):
             ft.NavigationRailDestination(icon=ft.Icons.PERSON_OUTLINE, selected_icon=ft.Icons.PERSON, label="Perfil"),
             ft.NavigationRailDestination(icon=ft.Icons.CALENDAR_MONTH_OUTLINED, selected_icon=ft.Icons.CALENDAR_MONTH, label="Cronogramas"),
             ft.NavigationRailDestination(icon=ft.Icons.GROUP_OUTLINED, selected_icon=ft.Icons.GROUP, label="Gestão Alunos"),
+            ft.NavigationRailDestination(icon=ft.Icons.SCHOOL_OUTLINED, selected_icon=ft.Icons.SCHOOL, label="Gestão Professores"),
             ft.NavigationRailDestination(icon=ft.Icons.FOLDER_OUTLINED, selected_icon=ft.Icons.FOLDER, label="Documentos"),
             ft.NavigationRailDestination(icon=ft.Icons.EDIT_NOTE_OUTLINED, selected_icon=ft.Icons.EDIT_NOTE, label="Atividades"),
             ft.NavigationRailDestination(icon=ft.Icons.VOLUNTEER_ACTIVISM_OUTLINED, selected_icon=ft.Icons.VOLUNTEER_ACTIVISM, label="Doações"),
@@ -122,7 +137,7 @@ def create_dashboard_view(page, switch_to_login, switch_content, role: str):
                         ft.Column(
                             [
                                 ft.Container(height=20),
-                                create_member_events_panel(),
+                        
                             ],
                             expand=1,
                             horizontal_alignment=ft.CrossAxisAlignment.CENTER

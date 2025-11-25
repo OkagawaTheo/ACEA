@@ -38,10 +38,10 @@ def create_atividades_aluno_view(page):
 
     return ft.Column(
         [
-            ft.Text("Minhas Atividades e Cronograma", size=30, weight=ft.FontWeight.BOLD),
+            ft.Text("Minhas Atividades e Cronograma", size=30, weight=ft.FontWeight.BOLD, color=ft.Colors.BLACK87),
             ft.Container(height=20),
             
-            ft.Text("Cronograma Atual (TAlunoAgenda)", size=20, weight=ft.FontWeight.W_600),
+            ft.Text("Cronograma Atual (TAlunoAgenda)", size=20, weight=ft.FontWeight.W_600, color=ft.Colors.BLACK87),
             
             # Navegação por Tabs das Atividades
             ft.Tabs(

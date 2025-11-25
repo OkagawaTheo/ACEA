@@ -6,6 +6,8 @@ from atividades_aluno_view import create_atividades_aluno_view
 from financeiro_view import create_financeiro_view
 from gestao_alunos_curso_professor_view import create_gestao_alunos_curso_professor_view
 from gestao_documentos_view import create_gestao_documentos_view
+from gestao_professores import create_gestao_professor_view
+from profile_view import get_profile_card
 
 # Mapeamento para navegação interna
 VIEW_MAPPING = {
@@ -13,9 +15,10 @@ VIEW_MAPPING = {
     "Perfil": 1, 
     "Cronogramas": 2,
     "Gestão Alunos": 3,
-    "Documentos": 4, 
-    "Atividades": 5, 
-    "Doações": 6,    
+    "Gestão Professores": 4,
+    "Documentos": 5, 
+    "Atividades": 6, 
+    "Doações": 7,    
 }
 
 def main(page: ft.Page):
@@ -51,6 +54,13 @@ def main(page: ft.Page):
                 main_content_column.controls.append(create_gestao_alunos_curso_professor_view(page))
             else:
                 main_content_column.controls.append(ft.Container(ft.Text("Acesso Negado: Gestão de Alunos.", color=ft.Colors.RED_700), padding=20))
+                
+        elif item_key == "Gestão Professores":
+            # Permissão: Admin (Gestão de Professores)
+            if role == "Admin":
+                main_content_column.controls.append(create_gestao_professor_view(page))
+            else:
+                main_content_column.controls.append(ft.Container(ft.Text("Acesso Negado: Gestão de Professores.", color=ft.Colors.RED_700), padding=20))
 
         elif item_key == "Documentos":
             # Permissão: Visualização para todos; Edição/CRUD dentro da view para Admin/Professor
@@ -65,7 +75,8 @@ def main(page: ft.Page):
             main_content_column.controls.append(create_financeiro_view(page, role))
         
         elif item_key == "Perfil":
-            main_content_column.controls.append(ft.Container(ft.Text(f"Tela de Perfil do {role}.", size=24), padding=20))
+            # 💡 Chama a função que retorna APENAS o card de perfil
+            main_content_column.controls.append(get_profile_card())
 
         page.update()
         

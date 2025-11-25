@@ -40,7 +40,7 @@ def create_cronograma_professor_view(page):
 
     return ft.Column(
         [
-            ft.Text("Gerenciamento de Cronogramas", size=30, weight=ft.FontWeight.BOLD),
+            ft.Text("Gerenciamento de Cronogramas", size=30, weight=ft.FontWeight.BOLD, color=ft.Colors.BLACK87),
             ft.Container(height=20),
 
             ft.Row(
@@ -49,7 +49,7 @@ def create_cronograma_professor_view(page):
                     ft.Container(
                         content=ft.Column(
                             [
-                                ft.Text("Criar/Editar Novo", size=20, weight=ft.FontWeight.W_600),
+                                ft.Text("Criar/Editar Novo", size=20, weight=ft.FontWeight.W_600, color=ft.Colors.BLACK87),
                                 nome_cronograma,
                                 descricao_cronograma,
                                 ft.Container(height=10),
