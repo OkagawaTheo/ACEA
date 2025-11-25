@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Aluno, Professor, Presidente, Administrador, Doador
+from curso.models import Curso, AtividadeEsportiva
 
 class AlunoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -34,3 +35,8 @@ class DoadorSerializer(serializers.ModelSerializer):
         model = Doador
         fields = '__all__'
         read_only_fields = ('id_doador',)
+        
+class MatricularSerializer(serializers.Serializer):
+    aluno_id = serializers.IntegerField()
+    curso_id = serializers.IntegerField(required=False)
+    atividade_id = serializers.IntegerField(required=False)

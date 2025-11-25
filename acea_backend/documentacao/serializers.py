@@ -14,3 +14,6 @@ class DoacaoSerializer(serializers.ModelSerializer):
         model = Doacao
         fields = '__all__'
         read_only_fields = ('id_doacao',)
+
+class StatusUpdateSerializer(serializers.Serializer):
+    status = serializers.ChoiceField(choices=Pagamento.statusPagamento.choices)
