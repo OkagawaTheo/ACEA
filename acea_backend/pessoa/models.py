@@ -1,7 +1,9 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import User # NOVO
 
-class Pessoa(models.Model): # Adicionar OneToOneField com auth.User p/ segurança
+class Pessoa(models.Model): 
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True) 
     nome = models.CharField(max_length=255)
     cpf = models.CharField(max_length=11,unique=True,db_column="CPF")
     tel = models.CharField(max_length=14,blank=True,null=True) 
@@ -16,7 +18,7 @@ class Aluno(Pessoa):
     id_aluno = models.AutoField(primary_key=True)
     matricula = models.CharField(max_length=50,default='',unique=True)
     endereco = models.CharField(max_length=255,blank=True,null=True)
-    data_nasc = models.DateTimeField(default= timezone.now) #melhorar a seleção de data
+    data_nasc = models.DateTimeField(default= timezone.now)
     cursos_matriculados = models.ManyToManyField( 
         'curso.Curso',
         blank = True,
@@ -38,7 +40,6 @@ class Administrador(Pessoa):
     tel = None
     is_administrador = models.AutoField(primary_key=True)
     is_superuser = models.BooleanField(default=True,verbose_name="Administrador")
-    # adicionar opcao de criar usuario do admin do sistema também no painel django.
 
 class Doador(Pessoa):
     id_doador = models.AutoField(primary_key=True)
