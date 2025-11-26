@@ -70,3 +70,37 @@ class Doacao(models.Model):
     def __str__(self):
         return f"Doação de R$ {self.valor} | {self.id_doador}"
 
+class Documento(models.Model):
+    # Opções para o campo 'tipo_documento'
+    class TipoDoc(models.TextChoices):
+        IDENTIDADE = 'RG', 'RG/CPF'
+        COMPROVANTE = 'COMP', 'Comprovante de Residência'
+        MEDICO = 'MED', 'Atestado Médico'
+        CONTRATO = 'CON', 'Contrato'
+        OUTRO = 'OUT', 'Outro'
+
+    id_documento = models.AutoField(primary_key=True)
+    
+    # Vinculo com o Usuário (Aluno/Prof/Admin)
+    usuario = models.ForeignKey(
+        User, 
+        on_delete=models.CASCADE, 
+        related_name='meus_documentos',
+        db_column='id_usuario' # Forçando o nome da coluna para ficar igual sua imagem
+    )
+
+    tipo_documento = models.CharField(
+        max_length=10, 
+        choices=TipoDoc.choices, 
+        default=TipoDoc.OUTRO
+    )
+
+    descricao = models.TextField(blank=True, null=True)
+    
+    # Onde o arquivo vai morar na pasta do computador
+    arquivo = models.FileField(upload_to='uploads_documentos/') 
+    
+    data_envio = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.tipo_documento} - {self.usuario.username}"
