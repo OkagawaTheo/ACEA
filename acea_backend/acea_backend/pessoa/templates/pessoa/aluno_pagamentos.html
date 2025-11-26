@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pagamentos de {{ aluno.nome }} - ACEA</title>
+    <style>
+        /* Estilos básicos para a tabela */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .status-pg {
+            color: green;
+            font-weight: bold;
+        }
+        .status-np {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Histórico Completo de Pagamentos: {{ aluno.nome }}</h1>
+    
+    <p>
+        <a href="{% url 'aluno_detalhe' pk=aluno.id_aluno %}">← Voltar para o Perfil do Aluno</a>
+    </p>
+
+    <section>
+        <h2>Pagamentos Registrados</h2>
+        {% if aluno_pagamentos %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th style="text-align: center;">Data do Pagamento</th>
+                        <th>Tipo</th>
+                        <th style="text-align: right;">Valor (R$)</th>
+                        <th style="text-align: center;">Status</th>
+                        <th>Administrador (Registro)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pagamento in aluno_pagamentos %}
+                    <tr>
+                        <td style="text-align: center;">{{ pagamento.id_pagamento }}</td>
+                        <td style="text-align: center;">{{ pagamento.data_pagamento|date:"d/m/Y" }}</td>
+                        {# Exibe o nome completo do tipo de pagamento #}
+                        <td>{{ pagamento.get_tipo_pagamento_display }}</td>
+                        <td style="text-align: right;">{{ pagamento.valor }}</td>
+                        <td style="text-align: center;">
+                            {% if pagamento.status == 'PG' %}
+                                <span class="status-pg">{{ pagamento.get_status_display }}</span>
+                            {% else %}
+                                <span class="status-np">{{ pagamento.get_status_display }}</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ pagamento.id_adm.nome|default:"Não informado" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Não há pagamentos registrados para {{ aluno.nome }}.</p>
+        {% endif %}
+    </section>
+
+    <p style="margin-top: 30px;">
+        <a href="{% url 'aluno_detalhe' pk=aluno.id_aluno %}">Voltar para o Perfil</a> |
+        <a href="{% url 'aluno_lista' %}">Voltar para a Lista de Alunos</a>
+    </p>
+
+</body>
+</html>
