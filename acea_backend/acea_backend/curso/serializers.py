@@ -7,7 +7,6 @@ class HorarioSerializer(serializers.ModelSerializer):
         fields = ['id', 'dia', 'hora_inicio', 'hora_fim'] # Usei lista explicita para ficar claro
 
 class CursoSerializer(serializers.ModelSerializer):
-    # Nested Serializer: Traz os horários junto com o curso
     horarios = HorarioSerializer(many=True, read_only=True)
 
     class Meta:
