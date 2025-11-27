@@ -5,7 +5,6 @@ from .models import Aluno, Professor, Presidente
 
 class CustomAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
-        # 1. Valida usuario e senha padrão
         serializer = self.serializer_class(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
@@ -13,7 +12,6 @@ class CustomAuthToken(ObtainAuthToken):
         # 2. Gera ou pega o token
         token, created = Token.objects.get_or_create(user=user)
         
-        # 3. Descobre quem é (Aluno, Professor ou Admin?)
         tipo_usuario = 'desconhecido'
         id_especifico = None
 
@@ -26,7 +24,6 @@ class CustomAuthToken(ObtainAuthToken):
         elif user.is_superuser: # Presidente/Admin
             tipo_usuario = 'admin'
 
-        # 4. Retorna tudo para o Flet
         return Response({
             'token': token.key,
             'user_id': user.pk,

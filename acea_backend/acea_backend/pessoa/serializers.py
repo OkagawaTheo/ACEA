@@ -1,10 +1,9 @@
 from rest_framework import serializers
-from django.contrib.auth.models import User # Importante para criar o login
+from django.contrib.auth.models import User 
 from .models import Aluno, Professor, Presidente, Administrador, Doador, Pessoa
 from curso.models import Curso, AtividadeEsportiva
 from django.db import IntegrityError
 
-# --- Lógica Automática de Criação de Usuário ---
 def criar_usuario_automatico(dados, tipo):
     """
     Cria um User do Django automaticamente.
@@ -17,15 +16,13 @@ def criar_usuario_automatico(dados, tipo):
     if not cpf:
         raise serializers.ValidationError({"erro": "CPF é obrigatório para gerar o login."})
 
-    # Cria o usuário no sistema de autenticação
     user = User.objects.create_user(
-        username=cpf,  # O Login será o CPF
+        username=cpf,  
         email=email,
-        password=cpf   # A Senha inicial será o CPF
+        password=cpf   
     )
     return user
 
-# -----------------------------------------------
 
 class AlunoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -37,18 +34,13 @@ class AlunoSerializer(serializers.ModelSerializer):
         cursos_data = validated_data.pop('cursos_matriculados', [])
 
         try:
-            # Tenta criar o usuário
             user = criar_usuario_automatico(validated_data, 'aluno')
         except IntegrityError:
-            # Se o banco reclamar que já existe, devolve erro amigável (400)
             raise serializers.ValidationError({"erro": "Este CPF já possui um cadastro de usuário no sistema."})
         except Exception as e:
             raise serializers.ValidationError({"erro": str(e)})
         
-        # Cria o aluno
         aluno = Aluno.objects.create(user=user, **validated_data)
-        
-        # Vincula cursos
         if cursos_data:
             aluno.cursos_matriculados.set(cursos_data)
         
@@ -61,14 +53,11 @@ class ProfessorSerializer(serializers.ModelSerializer):
         read_only_fields = ('id_professor', 'user')
 
     def create(self, validated_data):
-        # 1. Cria o Login (User)
         user = criar_usuario_automatico(validated_data, 'professor')
         
-        # 2. Cria o Professor vinculado a esse User
         professor = Professor.objects.create(user=user, **validated_data)
         return professor
 
-# --- Outros Serializers (Não precisam mudar agora) ---
 class PresidenteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Presidente

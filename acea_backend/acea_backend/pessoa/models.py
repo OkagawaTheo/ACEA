@@ -1,19 +1,14 @@
 from django.db import models
 from django.utils import timezone
-from django.contrib.auth.models import User  # <--- IMPORTAÇÃO NOVA
-
+from django.contrib.auth.models import User  
 class Pessoa(models.Model): 
-    # --- CAMPO DE LIGAÇÃO (NOVO) ---
-    # Conecta este cadastro a um Login do Django (User)
     user = models.OneToOneField(
         User, 
         on_delete=models.CASCADE, 
         null=True, 
         blank=True,
-        # O '%(class)s' muda automaticamente para 'aluno', 'professor', etc.
         related_name='%(class)s' 
     )
-    # -------------------------------
 
     nome = models.CharField(max_length=255)
     cpf = models.CharField(max_length=11, unique=True, db_column="CPF")
@@ -32,18 +27,15 @@ class Aluno(Pessoa):
     endereco = models.CharField(max_length=255, blank=True, null=True)
     data_nasc = models.DateTimeField(default=timezone.now)
     
-    # Vínculo com CURSOS (Já existia)
     cursos_matriculados = models.ManyToManyField( 
         'curso.Curso',
         blank=True,
         related_name='alunos_matriculados'
     )
 
-    # --- NOVO: Vínculo com ATIVIDADES ESPORTIVAS ---
     atividades_matriculadas = models.ManyToManyField(
         'curso.AtividadeEsportiva',
         blank=True,
-        # O 'related_name' é como a Atividade vai chamar os alunos de volta
         related_name='alunos_inscritos' 
     )
 
