@@ -19,11 +19,9 @@ class StatusUpdateSerializer(serializers.Serializer):
     status = serializers.ChoiceField(choices=Pagamento.statusPagamento.choices)
 
 class DocumentoSerializer(serializers.ModelSerializer):
-    # Campo extra para facilitar a leitura no Frontend
     nome_usuario = serializers.ReadOnlyField(source='usuario.username')
 
     class Meta:
         model = Documento
         fields = '__all__'
-        # Estes campos o usuário não preenche, o sistema preenche sozinho
         read_only_fields = ('id_documento', 'usuario', 'data_envio')

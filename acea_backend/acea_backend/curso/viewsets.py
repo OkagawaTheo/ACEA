@@ -11,13 +11,11 @@ class CursoViewSet(viewsets.ModelViewSet):
     serializer_class = CursoSerializer
 
     def get_permissions(self):
-        # ADICIONEI 'meus_cronogramas' AQUI PARA LIBERAR O ACESSO
         if self.action in ['list', 'retrieve', 'meus_cursos', 'meus_cronogramas']: 
             return [IsAuthenticated()]
         else:
             return [IsPresidenteOrAdmin()]
 
-    # --- AÇÃO DO ALUNO ---
     @action(detail=False, methods=['get'])
     def meus_cursos(self, request):
         user = request.user
@@ -27,7 +25,6 @@ class CursoViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
         return Response([])
 
-    # --- AÇÃO DO PROFESSOR ---
     @action(detail=False, methods=['get'])
     def meus_cronogramas(self, request):
         user = request.user
@@ -51,7 +48,6 @@ class AtividadeEsportivaViewSet(viewsets.ModelViewSet):
     def minhas_atividades(self, request):
         user = request.user
         if hasattr(user, 'aluno'):
-            # CORRIGIDO AQUI:
             atividades = AtividadeEsportiva.objects.filter(alunos_inscritos=user.aluno)
             return Response(self.get_serializer(atividades, many=True).data)
         return Response([])

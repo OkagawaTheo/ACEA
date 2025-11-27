@@ -4,7 +4,7 @@ from .models import Curso, AtividadeEsportiva, Horario
 class HorarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Horario
-        fields = ['id', 'dia', 'hora_inicio', 'hora_fim'] # Usei lista explicita para ficar claro
+        fields = ['id', 'dia', 'hora_inicio', 'hora_fim'] 
 
 class CursoSerializer(serializers.ModelSerializer):
     horarios = HorarioSerializer(many=True, read_only=True)
