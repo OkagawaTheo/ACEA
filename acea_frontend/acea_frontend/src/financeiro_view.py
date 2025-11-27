@@ -3,9 +3,11 @@ import requests
 
 def create_financeiro_view(page: ft.Page, role: str):
     
+    # URLs da API
     URL_PAGAMENTOS = "http://127.0.0.1:8000/documentacao/api/pagamentos/"
     URL_DOACOES = "http://127.0.0.1:8000/documentacao/api/doacoes/"
 
+    # --- Elementos Auxiliares ---
     snack_bar = ft.SnackBar(ft.Text(""))
     page.overlay.append(snack_bar)
 
@@ -19,7 +21,10 @@ def create_financeiro_view(page: ft.Page, role: str):
         token = page.client_storage.get("auth_token")
         return {'Authorization': f'Token {token}'} if token else None
 
-    # --- Elementos Tabela Pagamentos ---
+    # =================================================================
+    # ABA 1: PAGAMENTOS (Mensalidades)
+    # =================================================================
+    
     tabela_pagamentos = ft.DataTable(
         columns=[
             ft.DataColumn(ft.Text("ID", color=ft.Colors.BLACK)),
@@ -51,7 +56,7 @@ def create_financeiro_view(page: ft.Page, role: str):
                     txt_status = "PAGO" if eh_pago else "PENDENTE"
                     
                     conteudo_acao = ft.Text("-", color=ft.Colors.BLACK)
-                    if role == "Admin" or role == "Presidente":
+                    if role in ["Admin", "Presidente"]:
                         if not eh_pago:
                             conteudo_acao = ft.IconButton(ft.Icons.CHECK_CIRCLE, icon_color="green", on_click=lambda e, id=p['id_pagamento']: confirmar_pagamento(id))
                         else:
@@ -78,11 +83,17 @@ def create_financeiro_view(page: ft.Page, role: str):
             carregar_pagamentos()
         except Exception: pass
 
-    # --- Elementos Doações ---
-    valor_doacao = ft.TextField(label="Valor (R$)", width=150)
-    id_doador_input = ft.TextField(label="ID Doador", width=150)
+    # =================================================================
+    # ABA 2: DOAÇÕES (Apenas Visualização)
+    # =================================================================
+    
     tabela_doacoes = ft.DataTable(
-        columns=[ft.DataColumn(ft.Text("ID", color=ft.Colors.BLACK)), ft.DataColumn(ft.Text("Doador", color=ft.Colors.BLACK)), ft.DataColumn(ft.Text("Valor", color=ft.Colors.BLACK)), ft.DataColumn(ft.Text("Data", color=ft.Colors.BLACK))],
+        columns=[
+            ft.DataColumn(ft.Text("ID", color=ft.Colors.BLACK)),
+            ft.DataColumn(ft.Text("Doador", color=ft.Colors.BLACK)),
+            ft.DataColumn(ft.Text("Valor", color=ft.Colors.BLACK)),
+            ft.DataColumn(ft.Text("Data", color=ft.Colors.BLACK))
+        ],
         rows=[],
         border=ft.border.all(1, ft.Colors.BLACK12),
         heading_row_color=ft.Colors.GREY_200,
@@ -105,47 +116,33 @@ def create_financeiro_view(page: ft.Page, role: str):
                 if tabela_doacoes.page: tabela_doacoes.update()
         except Exception: pass
 
-    def registrar_doacao(e):
-        headers = get_headers()
-        dados = {"valor": valor_doacao.value, "id_doador": int(id_doador_input.value) if id_doador_input.value else None}
-        try:
-            if requests.post(f"{URL_DOACOES}registrar_doacao/", json=dados, headers=headers).status_code == 201:
-                mostrar_msg("Registrado!", ft.Colors.GREEN)
-                carregar_doacoes()
-        except Exception: pass
+    # =================================================================
+    # LAYOUT FINAL
+    # =================================================================
 
-    # Aba 1: Pagamentos
+    # Aba Pagamentos
     aba_pagamentos = ft.Container(
-        content=ft.ListView( # ListView é melhor que Column para scroll
+        content=ft.ListView(
             controls=[
-                ft.Row([
-                    ft.Text("Mensalidades", size=20, weight="bold", color=ft.Colors.BLACK),
-                    ft.IconButton(ft.Icons.REFRESH, icon_color="blue", on_click=lambda _: carregar_pagamentos())
-                ]),
-                ft.Container(height=10),
-                # Row com scroll ADAPTIVE permite rolar a tabela horizontalmente se ela for larga
-                ft.Row([tabela_pagamentos], scroll=ft.ScrollMode.ADAPTIVE)
-            ],
-            expand=True, # Ocupa todo o espaço vertical
+                ft.Row([ft.Text("Mensalidades", size=20, weight="bold", color=ft.Colors.BLACK), ft.IconButton(ft.Icons.REFRESH, icon_color="blue", on_click=lambda _: carregar_pagamentos())]),
+                ft.Row([tabela_pagamentos], scroll=ft.ScrollMode.ADAPTIVE),
+            ], 
             padding=10
         )
     )
 
-    # Aba 2: Doações
+    # Aba Doações (Simplificada)
     if role in ["Admin", "Presidente"]:
         aba_doacoes = ft.Container(
-            content=ft.ListView( # ListView aqui também
+            content=ft.ListView(
                 controls=[
-                    ft.Text("Nova Doação", size=18, weight="bold", color=ft.Colors.BLACK),
-                    ft.Row([valor_doacao, id_doador_input, ft.ElevatedButton("Registrar", on_click=registrar_doacao)]),
-                    ft.Divider(),
                     ft.Row([
-                        ft.Text("Histórico", size=18, weight="bold", color=ft.Colors.BLACK),
+                        ft.Text("Histórico de Doações Recebidas", size=20, weight="bold", color=ft.Colors.BLACK),
                         ft.IconButton(ft.Icons.REFRESH, icon_color="blue", on_click=lambda _: carregar_doacoes())
-                    ]),
+                    ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
+                    ft.Container(height=10),
                     ft.Row([tabela_doacoes], scroll=ft.ScrollMode.ADAPTIVE)
                 ],
-                expand=True,
                 padding=10
             )
         )
@@ -159,9 +156,7 @@ def create_financeiro_view(page: ft.Page, role: str):
     # Tabs
     tabs = ft.Tabs(
         selected_index=0,
-        animation_duration=300,
         label_color=ft.Colors.BLACK,
-        unselected_label_color=ft.Colors.GREY,
         tabs=[
             ft.Tab(text="Pagamentos", content=aba_pagamentos),
             ft.Tab(text="Doações", content=aba_doacoes),
@@ -169,9 +164,9 @@ def create_financeiro_view(page: ft.Page, role: str):
         expand=True,
     )
 
-    def inicializar_dados(): # Sem o 'e' aqui também para garantir
+    def inicializar_dados():
         carregar_pagamentos()
-        if role == "Admin": carregar_doacoes()
+        if role in ["Admin", "Presidente"]: carregar_doacoes()
 
     view = ft.Container(content=tabs, expand=True)
     view.did_mount = inicializar_dados

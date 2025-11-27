@@ -14,57 +14,67 @@ from rest_framework.permissions import AllowAny
 class AlunoViewSet(viewsets.ModelViewSet):
     queryset = Aluno.objects.all()
     serializer_class = AlunoSerializer
-    
+
     def get_permissions(self):
-        # 1. Aluno vê o próprio perfil
+        # Permitimos 'meus_dados' para edição (PUT)
         if self.action == 'meus_dados':
             return [IsAuthenticated()]
-        
-        # 2. Admin e Professor podem ver a LISTA de alunos e DETALHES
-        # 'list' = ver todos / 'retrieve' = ver um específico
         elif self.action in ['list', 'retrieve']:
-            return [(IsPresidenteOrAdmin | IsProfessor)()] # CORRETO
-
-        # 3. Criar, Editar ou Deletar alunos -> SÓ ADMIN/PRESIDENTE
+            return [(IsPresidenteOrAdmin | IsProfessor)()]
         else:
             return [IsPresidenteOrAdmin()]
 
-    # 3. A AÇÃO SEGURA (Que o Aluno pode acessar)
-    @action(detail=False, methods=['get'])
+    # --- ATUALIZADO: Aceita GET e PUT ---
+    @action(detail=False, methods=['get', 'put'])
     def meus_dados(self, request):
-        usuario = request.user
+        user = request.user
         try:
-            # Pega apenas o aluno ligado a este usuário
-            aluno = usuario.aluno 
+            aluno = user.aluno # Pega o aluno logado
+        except:
+            return Response({"erro": "Perfil não encontrado"}, status=404)
+
+        if request.method == 'GET':
             serializer = self.get_serializer(aluno)
             return Response(serializer.data)
-        except Exception:
-            return Response({"erro": "Perfil não encontrado"}, status=404)
-    
+        
+        elif request.method == 'PUT':
+            # partial=True permite alterar só o email sem ter que mandar o CPF de novo
+            serializer = self.get_serializer(aluno, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            return Response(serializer.errors, status=400)
+
 class ProfessorViewSet(viewsets.ModelViewSet):
     queryset = Professor.objects.all()
     serializer_class = ProfessorSerializer
     
     def get_permissions(self):
-        # Liberamos 'meus_dados' (perfil) e 'meus_alunos' (lista) para o professor logado
         if self.action in ['meus_dados', 'meus_alunos', 'matricular_aluno']:
             return [IsAuthenticated()]
-        # O resto (criar/deletar professor) só Admin
         return [IsPresidenteOrAdmin()]
 
-    # --- AÇÃO DE PERFIL DO PROFESSOR (NOVA) ---
-    @action(detail=False, methods=['get'])
+    # --- ATUALIZADO: Aceita GET e PUT ---
+    @action(detail=False, methods=['get', 'put'])
     def meus_dados(self, request):
-        usuario = request.user
+        user = request.user
         try:
-            # Tenta pegar o perfil de professor ligado a este usuário
-            # (Isso funciona graças ao related_name='professor' no models.py)
-            prof = usuario.professor
+            prof = user.professor
+        except:
+            return Response({"erro": "Perfil não encontrado"}, status=404)
+
+        if request.method == 'GET':
             serializer = self.get_serializer(prof)
             return Response(serializer.data)
-        except Exception:
-            return Response({"erro": "Perfil de professor não encontrado."}, status=404)
-
+        
+        elif request.method == 'PUT':
+            serializer = self.get_serializer(prof, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            return Response(serializer.errors, status=400)
+    
+    
     @action(detail=False, methods=['post'])
     def matricular_aluno(self, request):
         serializer = MatricularSerializer(data=request.data)
