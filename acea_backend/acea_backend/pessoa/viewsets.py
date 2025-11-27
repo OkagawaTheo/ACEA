@@ -16,7 +16,6 @@ class AlunoViewSet(viewsets.ModelViewSet):
     serializer_class = AlunoSerializer
 
     def get_permissions(self):
-        # Permitimos 'meus_dados' para edição (PUT)
         if self.action == 'meus_dados':
             return [IsAuthenticated()]
         elif self.action in ['list', 'retrieve']:
@@ -24,12 +23,11 @@ class AlunoViewSet(viewsets.ModelViewSet):
         else:
             return [IsPresidenteOrAdmin()]
 
-    # --- ATUALIZADO: Aceita GET e PUT ---
     @action(detail=False, methods=['get', 'put'])
     def meus_dados(self, request):
         user = request.user
         try:
-            aluno = user.aluno # Pega o aluno logado
+            aluno = user.aluno 
         except:
             return Response({"erro": "Perfil não encontrado"}, status=404)
 
@@ -38,7 +36,6 @@ class AlunoViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
         
         elif request.method == 'PUT':
-            # partial=True permite alterar só o email sem ter que mandar o CPF de novo
             serializer = self.get_serializer(aluno, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
@@ -54,7 +51,6 @@ class ProfessorViewSet(viewsets.ModelViewSet):
             return [IsAuthenticated()]
         return [IsPresidenteOrAdmin()]
 
-    # --- ATUALIZADO: Aceita GET e PUT ---
     @action(detail=False, methods=['get', 'put'])
     def meus_dados(self, request):
         user = request.user
@@ -93,10 +89,8 @@ class ProfessorViewSet(viewsets.ModelViewSet):
         aluno.save()
         return Response(AlunoSerializer(aluno).data, status=status.HTTP_200_OK)
 
-    # Mudei de detail=True para False
     @action(detail=False, methods=['get'])
     def meus_alunos(self, request):
-        # Em vez de pegar pelo ID da URL, pegamos pelo Token (mais seguro)
         professor = request.user.professor 
         
         # Filtra alunos vinculados a este professor
