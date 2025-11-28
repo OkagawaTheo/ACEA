@@ -5,11 +5,7 @@ from curso.models import Curso, AtividadeEsportiva
 from django.db import IntegrityError
 
 def criar_usuario_automatico(dados, tipo):
-    """
-    Cria um User do Django automaticamente.
-    - Username: O CPF (para garantir unicidade)
-    - Senha Padrão: O CPF (o aluno pode mudar depois)
-    """
+
     cpf = dados.get('cpf')
     email = dados.get('email')
     

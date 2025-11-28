@@ -17,5 +17,5 @@ urlpatterns = [
     path("alunos_lista/", views.AlunoListView.as_view(), name="aluno_lista"),
     path("alunos_detalhe/<int:pk>/", views.AlunoDetailView.as_view(), name="aluno_detalhe"),
     path("alunos_pagamentos/<int:pk>/pagamentos", views.AlunoPagamentosView.as_view(), name="aluno_pagamentos"),
-    path('api/login/', CustomAuthToken.as_view())
+    path('api/login/', CustomAuthToken.as_view()),
 ]
