@@ -5,26 +5,20 @@ def main(page: ft.Page):
     page.title = "Lista de Alunos (Vindo do Django)"
     page.scroll = "adaptive"
 
-    # URL da sua API (Exatamente a que funcionou no navegador)
     API_URL = "http://127.0.0.1:8000/pessoa/api/alunos/"
 
-    # Container onde vamos colocar os alunos
     lista_alunos = ft.Column()
 
     def carregar_dados():
         lista_alunos.controls.clear()
         
         try:
-            # 1. O Flet "liga" para o Django
             response = requests.get(API_URL)
             
-            # 2. Verifica se o Django atendeu (Status 200)
             if response.status_code == 200:
-                dados = response.json() # Transforma o texto em Lista Python
+                dados = response.json() 
                 
-                # 3. Para cada aluno na lista, cria um visual
                 for aluno in dados:
-                    # Montando um Card simples para cada aluno
                     card = ft.Card(
                         content=ft.Container(
                             padding=10,
@@ -47,7 +41,6 @@ def main(page: ft.Page):
         
         page.update()
 
-    # Botão para atualizar
     btn_atualizar = ft.ElevatedButton("Buscar Alunos do Banco", on_click=lambda _: carregar_dados())
 
     page.add(
@@ -56,7 +49,6 @@ def main(page: ft.Page):
         lista_alunos
     )
     
-    # Chama a função assim que abre o app
     carregar_dados()
 
 ft.app(target=main)

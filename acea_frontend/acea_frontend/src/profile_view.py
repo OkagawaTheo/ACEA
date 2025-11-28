@@ -29,7 +29,6 @@ def get_profile_card(page: ft.Page):
             width=250
         )
 
-    # --- FUNÇÃO: Salvar Edição (PUT) ---
     def salvar_edicao(e):
         url = ""
         if role == "Aluno":

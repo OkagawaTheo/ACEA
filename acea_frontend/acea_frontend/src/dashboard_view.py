@@ -37,7 +37,9 @@ def create_history_mission():
     )
 
 
-def create_member_events_panel():
+def create_member_events_panel(): 
+    # chamado por event
+    
     return ft.Container(
         content=ft.Column(
             [
