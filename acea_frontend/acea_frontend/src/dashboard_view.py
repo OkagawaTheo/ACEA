@@ -1,5 +1,6 @@
 import flet as ft
 
+# --- Configuration ---
 VIEW_MAPPING = {
     "Home": 0, 
     "Perfil": 1, 
@@ -8,122 +9,186 @@ VIEW_MAPPING = {
     "Gestão Professores": 4,
     "Documentos": 5, 
     "Atividades": 6, 
-    "Doações": 7,    
+    "Doações": 7,     
 }
 
-def create_history_mission(page):
+# --- Helper UI Functions ---
 
+def create_value_card(icon, icon_color, title):
+    return ft.Container(
+        content=ft.Column([
+            ft.Icon(icon, color=icon_color, size=32),
+            ft.Container(height=5),
+            ft.Text(title, weight=ft.FontWeight.W_600, color=ft.Colors.BLACK87, size=15),
+        ], alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.CENTER, spacing=2),
+        padding=20,
+        border=ft.border.all(1, ft.Colors.GREY_200),
+        border_radius=10,
+        expand=True,
+        height=130
+    )
+
+def create_event_item(icon, icon_bg, title, date):
+    return ft.Container(
+        content=ft.Row([
+            ft.Container(
+                content=ft.Icon(icon, color=ft.Colors.BLACK54 if icon_bg == ft.Colors.GREY_200 else ft.Colors.WHITE, size=16),
+                padding=8, 
+                bgcolor=icon_bg, 
+                border_radius=8,
+                width=36, height=36,
+                alignment=ft.alignment.center
+            ),
+            ft.Column([
+                ft.Text(title, weight=ft.FontWeight.W_600, size=13, color=ft.Colors.BLACK87),
+                ft.Text(date, size=11, color=ft.Colors.GREY_500)
+            ], spacing=2, expand=True, alignment=ft.MainAxisAlignment.CENTER),
+            ft.Icon(ft.Icons.CHEVRON_RIGHT, size=18, color=ft.Colors.GREY_400)
+        ], alignment=ft.MainAxisAlignment.START, vertical_alignment=ft.CrossAxisAlignment.CENTER),
+        padding=ft.padding.symmetric(vertical=8),
+    )
+
+# --- Main Components ---
+
+def create_history_mission(page):
     def mostrar_historia_completa(e):
         dialog = ft.AlertDialog(
-            modal=True,
-            bgcolor=ft.Colors.WHITE,
-            title=ft.Text("História Completa", size=22, weight=ft.FontWeight.BOLD),
+            title=ft.Text("História Completa"),
             content=ft.Container(
-                content=ft.Column(
-                    [
-                        ft.Text(
-                            "A Associação Cultural e Esportiva de Apucarana foi fundada com o objetivo de "
-                            "preservar, fortalecer e transmitir a cultura japonesa para as futuras gerações. "
-                            "Ao longo dos anos, tornou-se um ponto de encontro para celebrações tradicionais, "
-                            "práticas esportivas, eventos culturais e atividades comunitárias.\n\n"
-                            "Com forte dedicação de voluntários e membros ativos, a associação promove "
-                            "integração, respeito, educação e valorização da identidade cultural. Hoje, "
-                            "continua sendo um espaço acolhedor, onde tradição e modernidade caminham lado "
-                            "a lado para fortalecer a comunidade nikkei da região.",
-                            size=14,
-                            color=ft.Colors.BLACK87,
-                            selectable=True,
-                        )
-                    ],
-                    scroll=ft.ScrollMode.AUTO,
-                    height=250 #
-                ),
-                padding=10,
-                width=400, 
-            ),
-            actions=[
-                # Usa lambda para chamar page.close passando o próprio dialog
-                ft.TextButton("Fechar", on_click=lambda e: page.close(dialog))
-            ],
-            actions_alignment=ft.MainAxisAlignment.END,
-        )
+                content=ft.Text("A Associação Cultural e Esportiva de Apucarana foi fundada em 1948, e possui o objetivo de "
 
-        # MÉTODO NOVO E CORRETO DE ABRIR O DIALOG
+                            "preservar, fortalecer e transmitir a cultura japonesa para as futuras gerações. "
+
+                            "Ao longo dos anos, tornou-se um ponto de encontro para celebrações tradicionais, "
+
+                            "práticas esportivas, eventos culturais e atividades comunitárias.\n\n"
+
+                            "Com forte dedicação de voluntários e membros ativos, a associação promove "
+
+                            "integração, respeito, educação e valorização da identidade cultural. Hoje, "
+
+                            "continua sendo um espaço acolhedor, onde tradição e modernidade caminham lado "
+
+                            "a lado para fortalecer a comunidade nikkei da região.", ),
+                padding=10
+            ),
+        )
         page.open(dialog)
 
-    # --- Retorno do Widget Visual ---
     return ft.Container(
-        content=ft.Column(
-            [
-                ft.Text("Associação Cultural e Esportiva de Apucarana", size=24, weight=ft.FontWeight.W_900, color=ft.Colors.RED_700),
-                ft.Divider(height=10, color=ft.Colors.RED_ACCENT_100),
-                ft.Text(
-                    "A ACEA é uma instituição sem fins lucrativos, fundada em 1948, com o propósito de preservar, promover e difundir a herança cultural japonesa no município de Apucarana e em toda a região do norte do Paraná. ",
-                    size=14,
-                    color=ft.Colors.BLACK87,
-                    selectable=True
-                ),
-                ft.Container(height=15),
-                ft.Text("Valores Chave:", size=16, weight=ft.FontWeight.W_600, color=ft.Colors.BLACK87),
-                ft.Row(
-                    [
-                        ft.Icon(ft.Icons.AUTO_STORIES, color=ft.Colors.BLACK87),
-                        ft.Text("Tradição", size=14, color=ft.Colors.BLACK87),
-                        ft.VerticalDivider(),
-                        ft.Icon(ft.Icons.PEOPLE_ALT, color=ft.Colors.BLACK87),
-                        ft.Text("Comunidade", size=14, color=ft.Colors.BLACK87),
-                        ft.VerticalDivider(),
-                        ft.Icon(ft.Icons.BOOK, color=ft.Colors.BLACK87),
-                        ft.Text("Aprendizado", size=14, color=ft.Colors.BLACK87),
-                    ], spacing=10
-                ),
-                ft.Container(height=20),
-
-                ft.ElevatedButton(
-                    "Ver História Completa",
-                    bgcolor=ft.Colors.TEAL_600,
-                    color=ft.Colors.WHITE,
-                    on_click=mostrar_historia_completa
-                )
-            ]
-        ),
-        padding=ft.padding.only(top=10, right=20),
-    )
-
-def create_member_events_panel(): 
-    return ft.Container(
-        content=ft.Column(
-            [
-                ft.Divider(height=10, color=ft.Colors.RED_ACCENT_100),
-                ft.Text("Visão Geral", size=18, weight=ft.FontWeight.W_600, color=ft.Colors.BLACK87),
+        content=ft.Column([
+            ft.Row([
                 ft.Container(
-                    content=ft.Column([
-                        ft.Text("Próximos Eventos!", size=16, weight=ft.FontWeight.W_600, color=ft.Colors.RED_700), 
-                        ft.Container(height=5), 
-                        ft.ElevatedButton("Ver Agenda", bgcolor=ft.Colors.TEAL_700, color=ft.Colors.WHITE)
-                    ], spacing=5),
-                    padding=15, border_radius=10, bgcolor=ft.Colors.RED_ACCENT_100
+                    content=ft.Icon(ft.Icons.TEMPLE_BUDDHIST, color=ft.Colors.RED_700, size=70),
+                    padding=10, 
+                    border_radius=8
                 ),
-            ]
-        ),
-        padding=10
+                ft.Column([
+                    ft.Text("Associação Cultural e Esportiva de Apucarana", size=32, weight=ft.FontWeight.BOLD, color=ft.Colors.BLACK87),
+                    ft.Text("Fundada em 1948 • Instituição sem fins lucrativos", size=18, color=ft.Colors.GREY_500),
+                ], spacing=0, alignment=ft.MainAxisAlignment.CENTER)
+            ], alignment=ft.MainAxisAlignment.START, vertical_alignment=ft.CrossAxisAlignment.CENTER),
+            
+            ft.Container(height=20),
+            
+
+            ft.Text("Nossos Valores Essenciais", weight=ft.FontWeight.W_700, color=ft.Colors.BLACK87, size=24),
+            ft.Container(height=10),
+
+            ft.Row([
+                create_value_card(ft.Icons.ARCHITECTURE, ft.Colors.RED_600, "Tradição"),
+                create_value_card(ft.Icons.GROUPS, ft.Colors.GREEN_700, "Comunidade"),
+                create_value_card(ft.Icons.SCHOOL, ft.Colors.BLUE_600, "Educação"),
+            ], spacing=15),
+            
+            ft.Container(height=30),
+            
+            ft.ElevatedButton(
+                content=ft.Row([
+                    ft.Icon(ft.Icons.BOOK, size=16, color=ft.Colors.WHITE),
+                    ft.Text("Explorar História Completa", color=ft.Colors.WHITE, weight=ft.FontWeight.W_600)
+                ], alignment=ft.MainAxisAlignment.CENTER),
+                style=ft.ButtonStyle(
+                    bgcolor=ft.Colors.RED_800,
+                    shape=ft.RoundedRectangleBorder(radius=6),
+                    padding=ft.padding.symmetric(horizontal=20, vertical=18)
+                ),
+                on_click=mostrar_historia_completa,
+                width=240
+            )
+
+        ]),
+        bgcolor=ft.Colors.WHITE,
+        padding=40,
+        border_radius=12,
+        shadow=ft.BoxShadow(blur_radius=15, color=ft.Colors.with_opacity(0.06, ft.Colors.BLACK))
     )
 
+def create_right_sidebar(role, switch_content_callback):
+    return ft.Column([
+        ft.Container(
+            content=ft.Column([
+                ft.Row([
+                    ft.Text("Próximos Eventos", size=15, weight=ft.FontWeight.W_700, color=ft.Colors.BLACK87),
+                    ft.Icon(ft.Icons.CALENDAR_TODAY, color=ft.Colors.RED_700, size=18)
+                ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
+                
+                ft.Container(height=10),
+                
+                create_event_item(ft.Icons.LOCAL_FLORIST, ft.Colors.BROWN_200, "Sakura Matsuri", "15 Mar"),
+                create_event_item(ft.Icons.BRUSH, ft.Colors.BLUE_100, "Aula de Caligrafia", "18 Mar"),
+                create_event_item(ft.Icons.SPORTS_MARTIAL_ARTS, ft.Colors.GREY_700, "Campeonato de Judô", "22 Mar"),
+                create_event_item(ft.Icons.NATURE, ft.Colors.BROWN_300, "Workshop de Ikebana", "25 Mar"),
+                
+                ft.Container(height=15),
+                
+                ft.ElevatedButton(
+                    content=ft.Row([
+                        ft.Icon(ft.Icons.CALENDAR_MONTH, size=16, color=ft.Colors.RED_700),
+                        ft.Text("Ver Agenda Completa", color=ft.Colors.RED_700, size=12)
+                    ], alignment=ft.MainAxisAlignment.CENTER),
+                    style=ft.ButtonStyle(
+                        bgcolor=ft.Colors.GREY_300,
+                        shape=ft.RoundedRectangleBorder(radius=6),
+                        padding=15
+                    ),
+                    width=400,
+                    on_click=lambda _: switch_content_callback("Cronogramas", role) if switch_content_callback else None
+                )
+            ]),
+            bgcolor=ft.Colors.WHITE,
+            padding=25,
+            border_radius=12,
+            shadow=ft.BoxShadow(blur_radius=15, color=ft.Colors.with_opacity(0.06, ft.Colors.BLACK))
+        ),
+        
+        ft.Container(height=20),
+        
+        ft.Container(
+            content=ft.Column([
+                ft.Text("Permissão Atual", weight=ft.FontWeight.W_700, size=14, color=ft.Colors.BLACK87),
+                ft.Container(height=5),
+                ft.Container(
+                    content=ft.Row([
+                        ft.Icon(ft.Icons.SECURITY, color=ft.Colors.WHITE, size=20),
+                        ft.Text(role if role else "Admin", weight=ft.FontWeight.BOLD, color=ft.Colors.WHITE, size=16)
+                    ], alignment=ft.MainAxisAlignment.CENTER, spacing=10),
+                    bgcolor=ft.Colors.RED_700,
+                    padding=15,
+                    border_radius=8,
+                    on_click=lambda _: switch_content_callback("Perfil", role) if switch_content_callback else None,
+                    ink=True
+                ),
+            ]),
+            bgcolor=ft.Colors.WHITE,
+            padding=25,
+            border_radius=12,
+            shadow=ft.BoxShadow(blur_radius=15, color=ft.Colors.with_opacity(0.06, ft.Colors.BLACK))
+        )
+    ])
 
 def create_dashboard_content(page, role: str):
-    # Cria os componentes
-    mission_panel = create_history_mission(page)
-    event_panel = create_member_events_panel()
-    
-    return ft.Column(
-        [
-            ft.Container(height=20),
-            mission_panel,  
-            event_panel,
-            ft.Text(f"\nPermissão Atual: {role}", color=ft.Colors.RED_700 if role in ['Professor', 'Admin'] else ft.Colors.TEAL_700),
-        ],
-        expand=True
-    )
+    return create_history_mission(page)
 
 def create_dashboard_view(page, switch_to_login, switch_content, role: str):
     
@@ -131,74 +196,113 @@ def create_dashboard_view(page, switch_to_login, switch_content, role: str):
         selected_item_key = list(VIEW_MAPPING.keys())[e.control.selected_index]
         switch_content(selected_item_key, role)
     
+    # --- CUSTOM STYLED SIDEBAR (Compatibility Mode) ---
     rail = ft.NavigationRail(
-        selected_index=0, label_type=ft.NavigationRailLabelType.ALL, min_width=80, min_extended_width=100,
+        selected_index=0, 
+        label_type=ft.NavigationRailLabelType.ALL, 
+        min_width=100, 
+        min_extended_width=100,
         bgcolor=ft.Colors.BLACK,
+        
+        # Indicator for selected item (Dark Grey Pill)
+        indicator_color=ft.Colors.GREY_800,
+        indicator_shape=ft.RoundedRectangleBorder(radius=10),
+        
+        # Leading Logo (Red "文.")
+        leading=ft.Container(
+            content=ft.Text("文.", size=40, weight=ft.FontWeight.BOLD, color=ft.Colors.RED_ACCENT_400),
+            alignment=ft.alignment.center, 
+            height=100
+        ),
+        
+        # Reverted to standard arguments for compatibility
         destinations=[
-            ft.NavigationRailDestination(icon=ft.Icons.HOME_OUTLINED, selected_icon=ft.Icons.HOME, label="Home"),
-            ft.NavigationRailDestination(icon=ft.Icons.PERSON_OUTLINE, selected_icon=ft.Icons.PERSON, label="Perfil"),
-            ft.NavigationRailDestination(icon=ft.Icons.CALENDAR_MONTH_OUTLINED, selected_icon=ft.Icons.CALENDAR_MONTH, label="Cronogramas"),
-            ft.NavigationRailDestination(icon=ft.Icons.GROUP_OUTLINED, selected_icon=ft.Icons.GROUP, label="Gestão Alunos"),
-            ft.NavigationRailDestination(icon=ft.Icons.SCHOOL_OUTLINED, selected_icon=ft.Icons.SCHOOL, label="Gestão Professores"),
-            ft.NavigationRailDestination(icon=ft.Icons.FOLDER_OUTLINED, selected_icon=ft.Icons.FOLDER, label="Documentos"),
-            ft.NavigationRailDestination(icon=ft.Icons.EDIT_NOTE_OUTLINED, selected_icon=ft.Icons.EDIT_NOTE, label="Atividades"),
-            ft.NavigationRailDestination(icon=ft.Icons.VOLUNTEER_ACTIVISM_OUTLINED, selected_icon=ft.Icons.VOLUNTEER_ACTIVISM, label="Doações"),
+            ft.NavigationRailDestination(
+                icon=ft.Icons.HOME_OUTLINED, 
+                selected_icon=ft.Icons.HOME, 
+                label="Home"
+            ),
+            ft.NavigationRailDestination(
+                icon=ft.Icons.PERSON_OUTLINE, 
+                selected_icon=ft.Icons.PERSON, 
+                label="Perfil"
+            ),
+            ft.NavigationRailDestination(
+                icon=ft.Icons.CALENDAR_MONTH_OUTLINED, 
+                selected_icon=ft.Icons.CALENDAR_MONTH, 
+                label="Cronogramas"
+            ),
+            ft.NavigationRailDestination(
+                icon=ft.Icons.GROUP_OUTLINED, 
+                selected_icon=ft.Icons.GROUP, 
+                label="Gestão Alunos"
+            ),
+            ft.NavigationRailDestination(
+                icon=ft.Icons.SCHOOL_OUTLINED, 
+                selected_icon=ft.Icons.SCHOOL, 
+                label="Gestão Profs"
+            ),
+            ft.NavigationRailDestination(
+                icon=ft.Icons.FOLDER_OUTLINED, 
+                selected_icon=ft.Icons.FOLDER, 
+                label="Documentos"
+            ),
+            ft.NavigationRailDestination(
+                icon=ft.Icons.EDIT_NOTE_OUTLINED, 
+                selected_icon=ft.Icons.EDIT_NOTE, 
+                label="Atividades"
+            ),
+            ft.NavigationRailDestination(
+                icon=ft.Icons.VOLUNTEER_ACTIVISM_OUTLINED, 
+                selected_icon=ft.Icons.VOLUNTEER_ACTIVISM, 
+                label="Doações"
+            ),
         ],
         trailing=ft.Container(
             content=ft.IconButton(
-                icon=ft.Icons.LOGOUT_ROUNDED, icon_color=ft.Colors.WHITE, tooltip="Sair / Logout",
+                icon=ft.Icons.LOGOUT_ROUNDED, 
+                icon_color=ft.Colors.WHITE, 
+                tooltip="Sair / Logout",
                 on_click=lambda e: switch_to_login()
             ),
-            margin=ft.margin.only(top=150)
+            margin=ft.margin.only(top=50) 
         ),
-        leading=ft.Container(content=ft.Text("文.", size=30, weight=ft.FontWeight.BOLD, color=ft.Colors.RED_ACCENT_400), alignment=ft.alignment.center, height=70),
         on_change=navigation_rail_change
     )
 
-    # AQUI ESTAVA O PROBLEMA: Precisamos gerar o conteúdo inicial
-    initial_content = create_dashboard_content(page, role)
+    initial_main_content = create_dashboard_content(page, role)
+    right_sidebar = create_right_sidebar(role, switch_content)
 
-    dashboard_content = ft.Container(
-        content=ft.Column(
-            [
-                ft.Container(
-                    content=ft.Row(
-                        [
-                            ft.Column([ft.Text(f"Bem-vindo(a), {role}!", size=30, weight=ft.FontWeight.W_600, color=ft.Colors.BLACK87), ft.Text("Gerencie membros, aulas e eventos.", color=ft.Colors.BLACK54)], alignment=ft.MainAxisAlignment.START, spacing=2),
-                            ft.Icon(ft.Icons.ARCHITECTURE_OUTLINED, size=80, color=ft.Colors.BLACK87),
-                        ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN
-                    ),
-                    padding=ft.padding.only(left=20, right=20, top=20, bottom=20),
-                    bgcolor=ft.Colors.WHITE, border_radius=10,
-                ),
-
-                ft.Row(
-                    [
-                        # Coluna da Esquerda (Conteúdo Principal)
-                        ft.Column(
-                            [
-                                # INSERÇÃO CORRETA DO CONTEÚDO AQUI
-                                initial_content 
-                            ],
-                            expand=2,
-                            scroll=ft.ScrollMode.ADAPTIVE
-                        ),
-
-                        # Coluna da Direita (Espaço Extra)
-                        ft.Column(
-                            [
-                                ft.Container(height=20),
-                            ],
-                            expand=1,
-                            horizontal_alignment=ft.CrossAxisAlignment.CENTER
-                        )
-                    ],
-                    expand=True, vertical_alignment=ft.CrossAxisAlignment.START
-                ),
-            ],
-            scroll=ft.ScrollMode.ADAPTIVE, expand=True
-        ),
-        padding=ft.padding.only(top=0, left=20, right=20, bottom=20), expand=True
+    content_row = ft.Row(
+        [
+            ft.Column([initial_main_content], expand=7, scroll=ft.ScrollMode.HIDDEN),
+            ft.Container(width=20),
+            ft.Column([right_sidebar], expand=3, scroll=ft.ScrollMode.HIDDEN)
+        ],
+        vertical_alignment=ft.CrossAxisAlignment.START,
+        expand=True
     )
 
-    return ft.Row([rail, ft.VerticalDivider(width=1, color=ft.Colors.BLACK12), dashboard_content], expand=True, spacing=0, vertical_alignment=ft.CrossAxisAlignment.START)
+    dashboard_layout = ft.Container(
+        content=ft.Column(
+            [
+                ft.Container(height=10),
+                content_row
+            ],
+            scroll=ft.ScrollMode.AUTO, 
+            expand=True
+        ),
+        padding=ft.padding.all(30), 
+        expand=True,
+        bgcolor="#FFF9F6" 
+    )
+
+    return ft.Row(
+        [
+            rail, 
+            ft.VerticalDivider(width=1, color=ft.Colors.TRANSPARENT), 
+            dashboard_layout
+        ], 
+        expand=True, 
+        spacing=0
+)
