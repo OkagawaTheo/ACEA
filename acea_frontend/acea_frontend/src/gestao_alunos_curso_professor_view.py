@@ -1,5 +1,6 @@
 import flet as ft
 import requests
+import random  # <--- 1. IMPORT NECESSÁRIO
 
 def create_gestao_alunos_curso_professor_view(page: ft.Page):
     
@@ -7,7 +8,6 @@ def create_gestao_alunos_curso_professor_view(page: ft.Page):
     API_URL_CURSOS = "http://127.0.0.1:8000/curso/api/cursos/"
 
     # --- Estado da Edição ---
-    # Se None, estamos criando. Se tiver um ID, estamos editando.
     id_em_edicao = [None] 
 
     snack_bar = ft.SnackBar(ft.Text(""))
@@ -23,20 +23,31 @@ def create_gestao_alunos_curso_professor_view(page: ft.Page):
         token = page.client_storage.get("auth_token")
         return {'Authorization': f'Token {token}'} if token else None
 
+    # --- Função Auxiliar para Gerar Matrícula ---
+    def gerar_nova_matricula():
+        return str(random.randint(100000, 999999))
+
     # --- Campos ---
     nome_aluno = ft.TextField(label="Nome Completo", width=300)
     email_aluno = ft.TextField(label="E-mail", width=300)
     cpf_aluno = ft.TextField(label="CPF", width=140) 
-    matricula_aluno = ft.TextField(label="Matrícula", width=140)
+    
+    # <--- 2. MODIFICAÇÃO AQUI: Valor inicial aleatório e read_only=True
+    matricula_aluno = ft.TextField(
+        label="Matrícula", 
+        width=140, 
+        value=gerar_nova_matricula(), 
+        read_only=True  # Impede que o usuário digite manualmente (opcional)
+    )
     
     dropdown_cursos = ft.Dropdown(
         label="Selecione o Curso", width=300, options=[], color=ft.Colors.BLACK, border_color=ft.Colors.RED_ACCENT_100
     )
 
-    # Botão Principal (Muda de texto dinamicamente)
+    # Botão Principal
     btn_acao = ft.ElevatedButton("Adicionar e Matricular", icon=ft.Icons.ADD, bgcolor=ft.Colors.RED_700, color=ft.Colors.WHITE)
     
-    # Botão Cancelar (Aparece só na edição)
+    # Botão Cancelar
     btn_cancelar = ft.ElevatedButton("Cancelar", bgcolor=ft.Colors.GREY, color=ft.Colors.WHITE, visible=False)
 
     # Tabela
@@ -75,7 +86,6 @@ def create_gestao_alunos_curso_professor_view(page: ft.Page):
                 alunos_data_table.rows.clear()
                 for aluno in response.json():
                     
-                    # Configura botões com ID específico do aluno
                     btn_edit = ft.IconButton(
                         ft.Icons.EDIT, icon_color=ft.Colors.TEAL_700, 
                         on_click=lambda e, a=aluno: preparar_edicao(a)
@@ -99,29 +109,25 @@ def create_gestao_alunos_curso_professor_view(page: ft.Page):
     def deletar_aluno(id_aluno):
         headers = get_headers()
         try:
-            # Chama API com DELETE
             requests.delete(f"{API_URL_ALUNOS}{id_aluno}/", headers=headers)
             mostrar_msg("Aluno excluído.", ft.Colors.ORANGE)
             carregar_alunos()
         except Exception as e:
             mostrar_msg(f"Erro: {e}", ft.Colors.RED)
 
-    # --- FUNÇÃO: Preparar Edição (Preenche campos) ---
+    # --- FUNÇÃO: Preparar Edição ---
     def preparar_edicao(aluno):
-        id_em_edicao[0] = aluno['id_aluno'] # Marca que estamos editando este ID
+        id_em_edicao[0] = aluno['id_aluno']
         
-        # Preenche os campos com os dados do aluno
         nome_aluno.value = aluno['nome']
         email_aluno.value = aluno['email']
         cpf_aluno.value = aluno['cpf']
-        matricula_aluno.value = aluno['matricula']
+        matricula_aluno.value = aluno['matricula'] # Na edição, mantém a matrícula original
         
-        # Muda o botão
         btn_acao.text = "Salvar Alterações"
         btn_acao.icon = ft.Icons.SAVE
         btn_cancelar.visible = True
         
-        # Tenta selecionar o curso (se houver)
         if aluno.get('cursos_matriculados'):
             dropdown_cursos.value = str(aluno['cursos_matriculados'][0])
         
@@ -132,7 +138,10 @@ def create_gestao_alunos_curso_professor_view(page: ft.Page):
         nome_aluno.value = ""
         email_aluno.value = ""
         cpf_aluno.value = ""
-        matricula_aluno.value = ""
+        
+        # <--- 3. MODIFICAÇÃO AQUI: Gera nova matrícula ao resetar o formulário
+        matricula_aluno.value = gerar_nova_matricula()
+        
         dropdown_cursos.value = None
         
         btn_acao.text = "Adicionar e Matricular"
@@ -140,7 +149,7 @@ def create_gestao_alunos_curso_professor_view(page: ft.Page):
         btn_cancelar.visible = False
         page.update()
 
-    # --- FUNÇÃO: Salvar (Cria ou Atualiza) ---
+    # --- FUNÇÃO: Salvar ---
     def salvar_aluno(e):
         headers = get_headers()
         dados = {
@@ -154,18 +163,18 @@ def create_gestao_alunos_curso_professor_view(page: ft.Page):
 
         try:
             if id_em_edicao[0]: 
-                # --- MODO EDIÇÃO (PUT) ---
+                # EDITAR
                 url = f"{API_URL_ALUNOS}{id_em_edicao[0]}/"
                 response = requests.put(url, json=dados, headers=headers)
                 msg_sucesso = "Aluno atualizado!"
             else:
-                # --- MODO CRIAÇÃO (POST) ---
+                # CRIAR
                 response = requests.post(API_URL_ALUNOS, json=dados, headers=headers)
                 msg_sucesso = "Aluno criado!"
 
             if response.status_code in [200, 201]:
                 mostrar_msg(msg_sucesso, ft.Colors.GREEN)
-                cancelar_edicao(None) # Limpa formulário
+                cancelar_edicao(None) # Limpa formulário e gera nova matrícula
                 carregar_alunos()
             else:
                 mostrar_msg(f"Erro: {response.text}", ft.Colors.RED)

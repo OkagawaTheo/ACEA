@@ -15,20 +15,20 @@ def create_home_content(page: ft.Page, role: str):
 
     # --- TEXTO LONGO DA HISTÓRIA ---
     HISTORIA_COMPLETA = """
-    Fundada em 1990, nossa Associação Cultural nasceu do sonho de um grupo de educadores 
-    e artistas locais que acreditavam no poder transformador da educação e da cultura.
-    
-    No início, operávamos em uma pequena sala cedida pela comunidade, oferecendo apenas 
-    aulas de alfabetização e oficinas de artesanato. Com o passar dos anos e o apoio 
-    incansável de nossos voluntários e doadores, expandimos nossas atividades.
+    A Associação Cultural e Esportiva de Apucarana (ACEA) é uma instituição sem fins
+    lucrativos, fundada em 1948, com o propósito de preservar, promover e difundir a herança
+    cultural japonesa no município de Apucarana e em toda a região do norte do Paraná. 
 
-    Hoje, atendemos mais de 500 alunos em diversos cursos, desde idiomas e reforço escolar 
-    até artes marciais e dança. Nossa missão permanece a mesma: democratizar o acesso 
-    ao conhecimento e criar oportunidades para que jovens e adultos possam desenvolver 
-    todo o seu potencial.
+    Com mais de sete décadas de atuação, a ACEA consolidou-se como um importante centro de
+    referência cultural, educacional e comunitário, preservando seus valores como tradição,
+    respeito, integração e compromisso social
 
-    Acreditamos que a cultura é a base de uma sociedade justa e que a educação é a chave 
-    para a liberdade. Junte-se a nós nessa jornada!
+    A ACEA mantém a Escola Nipo-Brasileira de Apucarana, que oferece ensino da língua
+    japonesa e diversas atividades culturais voltadas ao público de todas as idades.
+
+    Além da promoção cultural, a ACEA desempenha um papel relevante no campo social.
+    Sua estrutura também contempla uma área voltada à saúde, com a manutenção de um hospital,
+    demonstrando o compromisso da entidade com o bem-estar da população local.
     """
 
     # --- Modal da História ---
@@ -52,8 +52,8 @@ def create_home_content(page: ft.Page, role: str):
         content=ft.Column([
             ft.Text("Bem-vindo à Associação Cultural", size=28, weight=ft.FontWeight.BOLD, color=ft.Colors.WHITE),
             ft.Text(
-                "Desde 1990 promovendo educação, cultura e esporte para a comunidade. "
-                "Nossa missão é transformar vidas através do conhecimento.",
+                "Há mais de sete décadas promovendo educação, cultura e esporte para a população de Apucarana."
+                "Nossa missão é preservar e transmitir a cultura.",
                 size=16, color=ft.Colors.WHITE70, text_align=ft.TextAlign.CENTER
             ),
             ft.Container(height=10),
@@ -71,7 +71,6 @@ def create_home_content(page: ft.Page, role: str):
         bgcolor=ft.Colors.BLUE_GREY_800,
         border_radius=10,
         alignment=ft.alignment.center,
-        # Background Image (opcional, se quiser manter)
         image_src="https://picsum.photos/1000/300?grayscale", 
         image_fit=ft.ImageFit.COVER,
         image_opacity=0.2,

@@ -40,7 +40,7 @@ def create_login_view(page: ft.Page, on_success):
                 if user_role:
                     page.client_storage.set("auth_token", token)
                     
-                    message_label.value = f"Login realizado! Bem-vindo(a) {user_role}. 🎉"
+                    message_label.value = f"Login realizado! Bem-vindo(a) {user_role}."
                     message_label.color = ft.Colors.TEAL_600
                     page.update()
                     

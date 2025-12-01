@@ -11,82 +11,126 @@ VIEW_MAPPING = {
     "Doações": 7,    
 }
 
-# --- FUNÇÕES DE COMPONENTES FIXOS DO DASHBOARD ---
+def create_history_mission(page):
 
-def create_history_mission():
+    def mostrar_historia_completa(e):
+        dialog = ft.AlertDialog(
+            modal=True,
+            bgcolor=ft.Colors.WHITE,
+            title=ft.Text("História Completa", size=22, weight=ft.FontWeight.BOLD),
+            content=ft.Container(
+                content=ft.Column(
+                    [
+                        ft.Text(
+                            "A Associação Cultural e Esportiva de Apucarana foi fundada com o objetivo de "
+                            "preservar, fortalecer e transmitir a cultura japonesa para as futuras gerações. "
+                            "Ao longo dos anos, tornou-se um ponto de encontro para celebrações tradicionais, "
+                            "práticas esportivas, eventos culturais e atividades comunitárias.\n\n"
+                            "Com forte dedicação de voluntários e membros ativos, a associação promove "
+                            "integração, respeito, educação e valorização da identidade cultural. Hoje, "
+                            "continua sendo um espaço acolhedor, onde tradição e modernidade caminham lado "
+                            "a lado para fortalecer a comunidade nikkei da região.",
+                            size=14,
+                            color=ft.Colors.BLACK87,
+                            selectable=True,
+                        )
+                    ],
+                    scroll=ft.ScrollMode.AUTO,
+                    height=250 #
+                ),
+                padding=10,
+                width=400, 
+            ),
+            actions=[
+                # Usa lambda para chamar page.close passando o próprio dialog
+                ft.TextButton("Fechar", on_click=lambda e: page.close(dialog))
+            ],
+            actions_alignment=ft.MainAxisAlignment.END,
+        )
+
+        # MÉTODO NOVO E CORRETO DE ABRIR O DIALOG
+        page.open(dialog)
+
+    # --- Retorno do Widget Visual ---
     return ft.Container(
         content=ft.Column(
             [
-                ft.Text("Nossa Missão", size=24, weight=ft.FontWeight.W_900, color=ft.Colors.RED_700),
+                ft.Text("Associação Cultural e Esportiva de Apucarana", size=24, weight=ft.FontWeight.W_900, color=ft.Colors.RED_700),
                 ft.Divider(height=10, color=ft.Colors.RED_ACCENT_100),
-                ft.Text("Associação Cultural e Esportiva de Apucarana, fundada para preservar a cultura japonesa.", size=14, color=ft.Colors.BLACK87, selectable=True),
+                ft.Text(
+                    "A ACEA é uma instituição sem fins lucrativos, fundada em 1948, com o propósito de preservar, promover e difundir a herança cultural japonesa no município de Apucarana e em toda a região do norte do Paraná. ",
+                    size=14,
+                    color=ft.Colors.BLACK87,
+                    selectable=True
+                ),
                 ft.Container(height=15),
                 ft.Text("Valores Chave:", size=16, weight=ft.FontWeight.W_600, color=ft.Colors.BLACK87),
                 ft.Row(
                     [
-                        ft.Icon(ft.Icons.AUTO_STORIES, color=ft.Colors.RED_ACCENT_700), ft.Text("Tradição", size=14, color=ft.Colors.BLACK87), ft.VerticalDivider(),
-                        ft.Icon(ft.Icons.PEOPLE_ALT, color=ft.Colors.RED_ACCENT_700), ft.Text("Comunidade", size=14, color=ft.Colors.BLACK87), ft.VerticalDivider(),
-                        ft.Icon(ft.Icons.BOOK, color=ft.Colors.RED_ACCENT_700), ft.Text("Aprendizado", size=14, color=ft.Colors.BLACK87),
+                        ft.Icon(ft.Icons.AUTO_STORIES, color=ft.Colors.BLACK87),
+                        ft.Text("Tradição", size=14, color=ft.Colors.BLACK87),
+                        ft.VerticalDivider(),
+                        ft.Icon(ft.Icons.PEOPLE_ALT, color=ft.Colors.BLACK87),
+                        ft.Text("Comunidade", size=14, color=ft.Colors.BLACK87),
+                        ft.VerticalDivider(),
+                        ft.Icon(ft.Icons.BOOK, color=ft.Colors.BLACK87),
+                        ft.Text("Aprendizado", size=14, color=ft.Colors.BLACK87),
                     ], spacing=10
                 ),
                 ft.Container(height=20),
-                ft.Row([ft.ElevatedButton("Ver História Completa 📖", bgcolor=ft.Colors.TEAL_600, color=ft.Colors.WHITE)])
+
+                ft.ElevatedButton(
+                    "Ver História Completa",
+                    bgcolor=ft.Colors.TEAL_600,
+                    color=ft.Colors.WHITE,
+                    on_click=mostrar_historia_completa
+                )
             ]
         ),
         padding=ft.padding.only(top=10, right=20),
     )
 
-
 def create_member_events_panel(): 
-    # chamado por event
-    
     return ft.Container(
         content=ft.Column(
             [
+                ft.Divider(height=10, color=ft.Colors.RED_ACCENT_100),
                 ft.Text("Visão Geral", size=18, weight=ft.FontWeight.W_600, color=ft.Colors.BLACK87),
-                ft.Divider(height=10, color="transparent"),
                 ft.Container(
-                    content=ft.Column([ft.Text("Próximos Eventos! 🏮", size=16, weight=ft.FontWeight.W_600, color=ft.Colors.RED_700), ft.Text("Não perca a Cerimônia de Chá...", size=12, color=ft.Colors.BLACK54), ft.Container(height=5), ft.ElevatedButton("Ver Agenda", bgcolor=ft.Colors.TEAL_700, color=ft.Colors.WHITE)], spacing=5),
+                    content=ft.Column([
+                        ft.Text("Próximos Eventos!", size=16, weight=ft.FontWeight.W_600, color=ft.Colors.RED_700), 
+                        ft.Container(height=5), 
+                        ft.ElevatedButton("Ver Agenda", bgcolor=ft.Colors.TEAL_700, color=ft.Colors.WHITE)
+                    ], spacing=5),
                     padding=15, border_radius=10, bgcolor=ft.Colors.RED_ACCENT_100
-                ),
-                ft.Divider(height=25, color="transparent"),
-                ft.Text("Estatísticas da Associação", size=18, weight=ft.FontWeight.W_600, color=ft.Colors.BLACK87),
-                
-                ft.Row(
-                    [
-                        ft.Card(content=ft.Container(content=ft.Column([ft.Text("85", size=30, weight=ft.FontWeight.BOLD, color=ft.Colors.BLACK87), ft.Text("Membros Ativos", size=12, color=ft.Colors.BLACK54)], alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.START), padding=15), elevation=0, margin=0, width=120, color=ft.Colors.WHITE),
-                        ft.Card(content=ft.Container(content=ft.Column([ft.Text("12", size=30, weight=ft.FontWeight.BOLD, color=ft.Colors.RED_ACCENT_700), ft.Text("Aulas / Cursos", size=12, color=ft.Colors.BLACK54)], alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.START), padding=15), elevation=0, margin=0, width=120, color=ft.Colors.WHITE),
-                    ], spacing=15
                 ),
             ]
         ),
         padding=10
     )
 
+
 def create_dashboard_content(page, role: str):
-    # 💡 AGORA, ADICIONAMOS O PAINEL DE EVENTOS AQUI
-    event_panel = create_member_events_panel() 
+    # Cria os componentes
+    mission_panel = create_history_mission(page)
+    event_panel = create_member_events_panel()
     
     return ft.Column(
         [
-            # Mantenha a Missão (que faz parte da Home)
             ft.Container(height=20),
-            create_history_mission(),
-            
-            # Adicione o Painel de Eventos (que agora é dinâmico)
+            mission_panel,  
             event_panel,
-            
             ft.Text(f"\nPermissão Atual: {role}", color=ft.Colors.RED_700 if role in ['Professor', 'Admin'] else ft.Colors.TEAL_700),
         ],
         expand=True
     )
+
 def create_dashboard_view(page, switch_to_login, switch_content, role: str):
     
     def navigation_rail_change(e):
         selected_item_key = list(VIEW_MAPPING.keys())[e.control.selected_index]
         switch_content(selected_item_key, role)
     
-    # --- Painel Lateral (Navigation Rail) ---
     rail = ft.NavigationRail(
         selected_index=0, label_type=ft.NavigationRailLabelType.ALL, min_width=80, min_extended_width=100,
         bgcolor=ft.Colors.BLACK,
@@ -111,10 +155,12 @@ def create_dashboard_view(page, switch_to_login, switch_content, role: str):
         on_change=navigation_rail_change
     )
 
+    # AQUI ESTAVA O PROBLEMA: Precisamos gerar o conteúdo inicial
+    initial_content = create_dashboard_content(page, role)
+
     dashboard_content = ft.Container(
         content=ft.Column(
             [
-                # 1. Cabeçalho/Saudação
                 ft.Container(
                     content=ft.Row(
                         [
@@ -128,18 +174,20 @@ def create_dashboard_view(page, switch_to_login, switch_content, role: str):
 
                 ft.Row(
                     [
+                        # Coluna da Esquerda (Conteúdo Principal)
                         ft.Column(
                             [
-                                # Este placeholder será preenchido pelo app.py
+                                # INSERÇÃO CORRETA DO CONTEÚDO AQUI
+                                initial_content 
                             ],
                             expand=2,
                             scroll=ft.ScrollMode.ADAPTIVE
                         ),
 
+                        # Coluna da Direita (Espaço Extra)
                         ft.Column(
                             [
                                 ft.Container(height=20),
-                        
                             ],
                             expand=1,
                             horizontal_alignment=ft.CrossAxisAlignment.CENTER
