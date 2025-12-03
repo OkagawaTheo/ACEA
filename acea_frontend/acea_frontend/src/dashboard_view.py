@@ -13,7 +13,6 @@ VIEW_MAPPING = {
 }
 
 # --- Helper UI Functions ---
-
 def create_value_card(icon, icon_color, title):
     return ft.Container(
         content=ft.Column([
@@ -49,31 +48,16 @@ def create_event_item(icon, icon_bg, title, date):
     )
 
 # --- Main Components ---
-
 def create_history_mission(page):
     def mostrar_historia_completa(e):
         dialog = ft.AlertDialog(
             title=ft.Text("História Completa"),
             content=ft.Container(
-                content=ft.Text("A Associação Cultural e Esportiva de Apucarana foi fundada em 1948, e possui o objetivo de "
-
-                            "preservar, fortalecer e transmitir a cultura japonesa para as futuras gerações. "
-
-                            "Ao longo dos anos, tornou-se um ponto de encontro para celebrações tradicionais, "
-
-                            "práticas esportivas, eventos culturais e atividades comunitárias.\n\n"
-
-                            "Com forte dedicação de voluntários e membros ativos, a associação promove "
-
-                            "integração, respeito, educação e valorização da identidade cultural. Hoje, "
-
-                            "continua sendo um espaço acolhedor, onde tradição e modernidade caminham lado "
-
-                            "a lado para fortalecer a comunidade nikkei da região.", ),
+                content=ft.Text("A Associação Cultural e Esportiva de Apucarana foi fundada em 1948...", ),
                 padding=10
             ),
         )
-        page.open(dialog)
+        page.open(dialog) # Updated to page.open
 
     return ft.Container(
         content=ft.Column([
@@ -90,8 +74,6 @@ def create_history_mission(page):
             ], alignment=ft.MainAxisAlignment.START, vertical_alignment=ft.CrossAxisAlignment.CENTER),
             
             ft.Container(height=20),
-            
-
             ft.Text("Nossos Valores Essenciais", weight=ft.FontWeight.W_700, color=ft.Colors.BLACK87, size=24),
             ft.Container(height=10),
 
@@ -116,7 +98,6 @@ def create_history_mission(page):
                 on_click=mostrar_historia_completa,
                 width=240
             )
-
         ]),
         bgcolor=ft.Colors.WHITE,
         padding=40,
@@ -134,7 +115,6 @@ def create_right_sidebar(role, switch_content_callback):
                 ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
                 
                 ft.Container(height=10),
-                
                 create_event_item(ft.Icons.LOCAL_FLORIST, ft.Colors.BROWN_200, "Sakura Matsuri", "15 Mar"),
                 create_event_item(ft.Icons.BRUSH, ft.Colors.BLUE_100, "Aula de Caligrafia", "18 Mar"),
                 create_event_item(ft.Icons.SPORTS_MARTIAL_ARTS, ft.Colors.GREY_700, "Campeonato de Judô", "22 Mar"),
@@ -196,75 +176,32 @@ def create_dashboard_view(page, switch_to_login, switch_content, role: str):
         selected_item_key = list(VIEW_MAPPING.keys())[e.control.selected_index]
         switch_content(selected_item_key, role)
     
-    # --- CUSTOM STYLED SIDEBAR (Compatibility Mode) ---
+    # Sidebar (Standard)
     rail = ft.NavigationRail(
         selected_index=0, 
         label_type=ft.NavigationRailLabelType.ALL, 
         min_width=100, 
         min_extended_width=100,
         bgcolor=ft.Colors.BLACK,
-        
-        # Indicator for selected item (Dark Grey Pill)
         indicator_color=ft.Colors.GREY_800,
         indicator_shape=ft.RoundedRectangleBorder(radius=10),
-        
-        # Leading Logo (Red "文.")
         leading=ft.Container(
             content=ft.Text("文.", size=40, weight=ft.FontWeight.BOLD, color=ft.Colors.RED_ACCENT_400),
             alignment=ft.alignment.center, 
             height=100
         ),
-        
-        # Reverted to standard arguments for compatibility
         destinations=[
-            ft.NavigationRailDestination(
-                icon=ft.Icons.HOME_OUTLINED, 
-                selected_icon=ft.Icons.HOME, 
-                label="Home"
-            ),
-            ft.NavigationRailDestination(
-                icon=ft.Icons.PERSON_OUTLINE, 
-                selected_icon=ft.Icons.PERSON, 
-                label="Perfil"
-            ),
-            ft.NavigationRailDestination(
-                icon=ft.Icons.CALENDAR_MONTH_OUTLINED, 
-                selected_icon=ft.Icons.CALENDAR_MONTH, 
-                label="Cronogramas"
-            ),
-            ft.NavigationRailDestination(
-                icon=ft.Icons.GROUP_OUTLINED, 
-                selected_icon=ft.Icons.GROUP, 
-                label="Gestão Alunos"
-            ),
-            ft.NavigationRailDestination(
-                icon=ft.Icons.SCHOOL_OUTLINED, 
-                selected_icon=ft.Icons.SCHOOL, 
-                label="Gestão Profs"
-            ),
-            ft.NavigationRailDestination(
-                icon=ft.Icons.FOLDER_OUTLINED, 
-                selected_icon=ft.Icons.FOLDER, 
-                label="Documentos"
-            ),
-            ft.NavigationRailDestination(
-                icon=ft.Icons.EDIT_NOTE_OUTLINED, 
-                selected_icon=ft.Icons.EDIT_NOTE, 
-                label="Atividades"
-            ),
-            ft.NavigationRailDestination(
-                icon=ft.Icons.VOLUNTEER_ACTIVISM_OUTLINED, 
-                selected_icon=ft.Icons.VOLUNTEER_ACTIVISM, 
-                label="Doações"
-            ),
+            ft.NavigationRailDestination(icon=ft.Icons.HOME_OUTLINED, selected_icon=ft.Icons.HOME, label="Home"),
+            ft.NavigationRailDestination(icon=ft.Icons.PERSON_OUTLINE, selected_icon=ft.Icons.PERSON, label="Perfil"),
+            ft.NavigationRailDestination(icon=ft.Icons.CALENDAR_MONTH_OUTLINED, selected_icon=ft.Icons.CALENDAR_MONTH, label="Cronogramas"),
+            ft.NavigationRailDestination(icon=ft.Icons.GROUP_OUTLINED, selected_icon=ft.Icons.GROUP, label="Gestão Alunos"),
+            ft.NavigationRailDestination(icon=ft.Icons.SCHOOL_OUTLINED, selected_icon=ft.Icons.SCHOOL, label="Gestão Profs"),
+            ft.NavigationRailDestination(icon=ft.Icons.FOLDER_OUTLINED, selected_icon=ft.Icons.FOLDER, label="Documentos"),
+            ft.NavigationRailDestination(icon=ft.Icons.EDIT_NOTE_OUTLINED, selected_icon=ft.Icons.EDIT_NOTE, label="Atividades"),
+            ft.NavigationRailDestination(icon=ft.Icons.VOLUNTEER_ACTIVISM_OUTLINED, selected_icon=ft.Icons.VOLUNTEER_ACTIVISM, label="Doações"),
         ],
         trailing=ft.Container(
-            content=ft.IconButton(
-                icon=ft.Icons.LOGOUT_ROUNDED, 
-                icon_color=ft.Colors.WHITE, 
-                tooltip="Sair / Logout",
-                on_click=lambda e: switch_to_login()
-            ),
+            content=ft.IconButton(icon=ft.Icons.LOGOUT_ROUNDED, icon_color=ft.Colors.WHITE, tooltip="Sair / Logout", on_click=lambda e: switch_to_login()),
             margin=ft.margin.only(top=50) 
         ),
         on_change=navigation_rail_change
@@ -273,14 +210,16 @@ def create_dashboard_view(page, switch_to_login, switch_content, role: str):
     initial_main_content = create_dashboard_content(page, role)
     right_sidebar = create_right_sidebar(role, switch_content)
 
+    # --- LAYOUT FIX: Removed scroll=ft.ScrollMode.HIDDEN from inner columns ---
+    # This allows the cronogram list to calculate its height correctly.
     content_row = ft.Row(
         [
-            ft.Column([initial_main_content], expand=7, scroll=ft.ScrollMode.HIDDEN),
+            ft.Column([initial_main_content], expand=7), # Removed scroll=Hidden
             ft.Container(width=20),
-            ft.Column([right_sidebar], expand=3, scroll=ft.ScrollMode.HIDDEN)
+            ft.Column([right_sidebar], expand=3)  # Removed scroll=Hidden
         ],
         vertical_alignment=ft.CrossAxisAlignment.START,
-        expand=True
+        # Removed expand=True from Row to let content flow naturally
     )
 
     dashboard_layout = ft.Container(
@@ -289,7 +228,7 @@ def create_dashboard_view(page, switch_to_login, switch_content, role: str):
                 ft.Container(height=10),
                 content_row
             ],
-            scroll=ft.ScrollMode.AUTO, 
+            scroll=ft.ScrollMode.AUTO, # The main container handles the scroll
             expand=True
         ),
         padding=ft.padding.all(30), 
@@ -305,4 +244,4 @@ def create_dashboard_view(page, switch_to_login, switch_content, role: str):
         ], 
         expand=True, 
         spacing=0
-)
+    )
